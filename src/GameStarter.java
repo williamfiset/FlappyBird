@@ -39,5 +39,4 @@ public class GameStarter{
 	   	appletFrame.setTitle("Flappy Bird - Micah & Will");
 
 	}
-
 }
