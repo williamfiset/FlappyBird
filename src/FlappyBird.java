@@ -11,6 +11,7 @@
 import acm.graphics.*;
 import acm.program.*;
 import java.awt.event.*;
+import java.util.Random;
 
 public class FlappyBird extends GraphicsProgram {
 
@@ -22,6 +23,11 @@ public class FlappyBird extends GraphicsProgram {
 	static int currentMode = 0; // 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
 	static int score = 0;
 	
+	//award for variation between spaces in pipes
+	static int[] pipeSpaceAward = new int[4];
+	//min and max for the space between pipes
+	int min = 38, max = 138;	
+
 	@Override public void init() {
 		
 		setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -55,7 +61,7 @@ public class FlappyBird extends GraphicsProgram {
 		}
 
 		// Draw the initial "0"
-		drawScore();
+		drawScore(false);
 		
 		// Set up keyboard and mouse
 		addMouseListeners();
@@ -169,8 +175,8 @@ public class FlappyBird extends GraphicsProgram {
 
 			// Check to see if it's time to award another point
 			if(Data.pipeBottom[i].getX() == BIRD_X_START + 2){
-				score++;
-				drawScore();
+				score = score + pipeSpaceAward[i];
+				drawScore(false);
 				Music.playSound("Music/coinSound.wav");
 			}
 			
@@ -195,10 +201,17 @@ public class FlappyBird extends GraphicsProgram {
 	}
 	
 	/** Randomizes the given set of pipes **/
-	public void randomizePipes(int i){
+	public void randomizePipes(int i){;	
+		//generate random number between 25 and 100
+		int pipeSpace = (int) (Math.random() * (max - min + 1) ) + min;
+		//saves the award for the space between pipes
+		pipeSpaceAward[i] = max - pipeSpace;
+
 		int randomAltitude = (int) (Math.random() * (GROUND_LEVEL/2) ) - 101;
-		Data.pipeTop[i].move(0, randomAltitude - 50);
-		Data.pipeBottom[i].move(0, randomAltitude + 50);
+		//moves the pipes to the new location
+		Data.pipeTop[i].move(0, randomAltitude - pipeSpace);
+		Data.pipeBottom[i].move(0, randomAltitude + pipeSpace);
+	
 	}
 
 	
@@ -222,10 +235,11 @@ public class FlappyBird extends GraphicsProgram {
 		add(Data.replayButton);
 
 		// Award medal if applicable
-		if(score >= 40) add(Data.platinumMedal);
-		else if(score >= 30) add(Data.goldMedal);
-		else if(score >= 20) add(Data.silverMedal);
-		else if(score >= 10) add(Data.bronzeMedal);
+		int scoreInterval = (max + min) / 2;
+		if(score >= scoreInterval * 40) add(Data.platinumMedal);
+		else if(score >= scoreInterval * 30) add(Data.goldMedal);
+		else if(score >= scoreInterval * 20) add(Data.silverMedal);
+		else if(score >= scoreInterval * 10) add(Data.bronzeMedal);
 
 		// Retrieve high score from file
 		String strHighScore = highScoreFile.getHighScore();
@@ -346,7 +360,7 @@ public class FlappyBird extends GraphicsProgram {
 	}
 
 	/** Draws your current score on the screen **/
-	protected void drawScore(){
+	protected void drawScore(boolean onPipe){
 			
 		// Initialize variables
 		int tempScore = score, widthScore = -1, digitCounter = 0;
@@ -365,8 +379,22 @@ public class FlappyBird extends GraphicsProgram {
 		while(tempScore > 0);
 			
 		// Find the x point where we will begin writing the number so that it's centered
-		int startPoint = (SCREEN_WIDTH/2) - (widthScore/2);
-			
+		int startPoint;
+		// Draw the score on the pipe
+		if (onPipe){
+			startPoint = (SCREEN_WIDTH/2) - (widthScore/2) - 2;
+			for(int n = 0; n < digitCounter; n++){
+				int index = digitCounter - n - 1;
+				Data.scoreDigits[index].setLocation(startPoint, 232);
+				add(Data.scoreDigits[index]);
+				startPoint += Data.scoreDigits[index].getWidth() + 1;
+			}
+		}
+		// Draw the score on the scoreboard
+		else {
+			 startPoint = (SCREEN_WIDTH/2) - (widthScore/2);
+		}
+
 		// Draw the number on screen
 		for(int n = 0; n < digitCounter; n++){
 			int index = digitCounter - n - 1;
