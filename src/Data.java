@@ -23,7 +23,8 @@ public abstract class Data{
 
 		public static GImage[] pipeTop = new  GImage[4], pipeBottom = new GImage[4],
 				medNums = new  GImage[10], bigNums = new GImage[10],
-				scoreDigits = new GImage[10], scoreBoardDigits = new GImage[20];
+				scoreDigits = new GImage[10], scoreBoardDigits = new GImage[20],
+				pipeDigits = new GImage[10];
 	    
 	  /** Loads and sets the location of all the images **/
 		public static void init(){
