@@ -1,5 +1,7 @@
 Non Tradional variation on the following modified by Wade Helquist.
-Variable openings for pipes. Added score is dependent on how large/small the opening is.
+==========
+Variable openings for pipes. 
+Added score is dependent on how large/small the opening is.
 Smaller openings give more points.
 At the top it shows how much will be added after going thru the next pipe.
 
