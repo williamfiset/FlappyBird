@@ -22,9 +22,10 @@ public abstract class Data{
 					     bronzeMedal, silverMedal, goldMedal, platinumMedal, new_;
 
 		public static GImage[] pipeTop = new  GImage[4], pipeBottom = new GImage[4],
-				medNums = new  GImage[10], bigNums = new GImage[10],
-				scoreDigits = new GImage[10], scoreBoardDigits = new GImage[20],
-				pipeDigits = new GImage[10];
+				medNums = new  GImage[10], bigNums = new GImage[10],  
+				scoreDigits = new GImage[10], scoreBoardDigits = new GImage[20];
+				
+		public static GImage[][] pipeDigits = new GImage[4][10];
 	    
 	  /** Loads and sets the location of all the images **/
 		public static void init(){
@@ -48,6 +49,9 @@ public abstract class Data{
 			for(int i = 0; i < 4; i++){
 				Data.pipeTop[i] = makeImage(fullImage, 112, 646, 164, 965);
 				Data.pipeBottom[i] = makeImage(fullImage, 168, 646, 220, 965);
+				for (int n = 0; n < 10; n++){
+				Data.pipeDigits[i][n] = makeImage(fullImage, 274, 612, 288, 632);
+				}
 			}
 
 			// Score Board
