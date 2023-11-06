@@ -20,7 +20,7 @@ public class Bird extends FlappyBird{
 	public Bird(int startingX, int startingY){
 		
 		// Creates a thin invisible rectangle on top of the bird as it flys for collision detection
-		birdRect = new GRectangle(x, y , (int) Data.birdFlat.getWidth(), (int) Data.birdFlat.getHeight());
+		birdRect = new GRectangle(x, y , (int) Data.birdFlatDay.getWidth(), (int) Data.birdFlatDay.getHeight());
 
 		this.x = startingX;
 		this.y = startingY;
@@ -30,11 +30,11 @@ public class Bird extends FlappyBird{
 	/** Checks for collision between the pipes and the bird **/
 	public boolean pipeCollision(){
 
-		for (GImage pipeImage : Data.pipeTop)
+		for (GImage pipeImage : Data.pipeTopDay)
 			if(birdRect.intersects( new GRectangle(pipeImage.getBounds())))
 				return true;
 
-		for (GImage pipeImage : Data.pipeBottom)
+		for (GImage pipeImage : Data.pipeBottomDay)
 			if(birdRect.intersects( new GRectangle(pipeImage.getBounds())))
 				return true;
 
@@ -45,9 +45,15 @@ public class Bird extends FlappyBird{
 	public void draw(GraphicsProgram window){
 		
 		// Resets the location for all bird images
-		Data.birdDown.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
-		Data.birdFlat.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
-		Data.birdUp.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
+		//Day
+		Data.birdDownDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
+		Data.birdFlatDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
+		Data.birdUpDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
+
+		//Night
+		Data.birdDownNight.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
+		Data.birdFlatNight.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
+		Data.birdUpNight.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
 		
 		if(FlappyBird.currentMode != 2){
 			
@@ -87,20 +93,37 @@ public class Bird extends FlappyBird{
 	protected void animateBird(int index, GraphicsProgram window){
 		
 		if(index == 0){
-			window.add(Data.birdFlat);
-			window.remove(Data.birdUp);
+			//Day
+			window.add(Data.birdFlatDay);
+			window.remove(Data.birdUpDay);
+			//Night
+			window.add(Data.birdFlatNight);
+			window.remove(Data.birdUpNight);
 		}
 		else if(index == 1){
-			window.add(Data.birdDown);
-			window.remove(Data.birdFlat);
+			//Day
+			window.add(Data.birdDownDay);
+			window.remove(Data.birdFlatDay);
+			//Night
+			window.add(Data.birdDownNight);
+			window.remove(Data.birdFlatNight);
+
 		}
 		else if(index == 2){
-			window.add(Data.birdFlat);
-			window.remove(Data.birdDown);
+			//Day
+			window.add(Data.birdFlatDay);
+			window.remove(Data.birdDownDay);
+			//Night
+			window.add(Data.birdFlatNight);
+			window.remove(Data.birdDownNight);
 		}
 		else{
-			window.add(Data.birdUp);
-			window.remove(Data.birdFlat);
+			//Day
+			window.add(Data.birdUpDay);
+			window.remove(Data.birdFlatDay);
+			//Night
+			window.add(Data.birdUpNight);
+			window.remove(Data.birdFlatNight);
 		}
 		
 	}

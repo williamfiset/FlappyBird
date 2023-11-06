@@ -17,11 +17,14 @@ public abstract class Data{
 		public static BufferedImage fullImage = null;
 
 		public static GImage ground,
-					     birdFlat, birdUp, birdDown, birdDead, backgroundDay, backgroundNight,
+					     birdFlatDay, birdUpDay, birdDownDay, birdDeadDay, 
+						 birdFlatNight, birdUpNight, birdDownNight, birdDeadNight, 
+						 backgroundDay, backgroundNight,
 					     getReady, gameOver, instructions, scoreboard, replayButton,
 					     bronzeMedal, silverMedal, goldMedal, platinumMedal, new_;
 
-		public static GImage[] pipeTop = new  GImage[4], pipeBottom = new GImage[4],
+		public static GImage[] pipeTopDay = new  GImage[4], pipeBottomDay = new GImage[4],
+				pipeTopNight = new  GImage[4], pipeBottomNight = new GImage[4],
 				medNums = new  GImage[10], bigNums = new GImage[10],  
 				scoreDigits = new GImage[10], scoreBoardDigits = new GImage[20];
 				
@@ -49,8 +52,15 @@ public abstract class Data{
 
 			// Pipes
 			for(int i = 0; i < 4; i++){
-				Data.pipeTop[i] = makeImage(fullImage, 112, 646, 164, 965);
-				Data.pipeBottom[i] = makeImage(fullImage, 168, 646, 220, 965);
+				//Green pipes (for day mode)
+				Data.pipeTopNight[i] = makeImage(fullImage, 112, 646, 164, 965);
+				Data.pipeBottomNight[i] = makeImage(fullImage, 168, 646, 220, 965);
+
+				//Red pipes on the sprite image to the far left of the image
+				Data.pipeTopDay[i] = makeImage(fullImage, 0, 646, 52, 965);
+				Data.pipeBottomDay[i] = makeImage(fullImage, 56, 644, 108, 963);
+				
+				// Score Digits
 				for (int n = 0; n < 10; n++){
 				Data.pipeDigits[i][n] = makeImage(fullImage, 274, 612, 288, 632);
 				}
@@ -83,12 +93,19 @@ public abstract class Data{
 			// Foreground
 			Data.ground = makeImage(fullImage, 584, 0, 919, 111);
 
-			// Bird Parts
-			Data.birdUp = makeImage(fullImage, 6, 982, 39, 1005);
-			Data.birdFlat = makeImage(fullImage, 62, 982, 95, 1005);
-			Data.birdDown = makeImage(fullImage, 118, 982, 151, 1005);
-			Data.birdDead = makeImage(fullImage, 297, 983, 327, 1020);
+			// Bird Parts 
+			// (red for the day mode)
+			Data.birdUpDay = makeImage(fullImage, 230, 763	,263, 785);	
+			Data.birdFlatDay = makeImage(fullImage, 230, 815, 263,838);
+			Data.birdDownDay = makeImage(fullImage, 230, 867, 263, 891);
+			Data.birdDeadDay = makeImage(fullImage, 367, 982, 397, 1020);
+			// (green for the night mode)
+			Data.birdUpNight = makeImage(fullImage, 6, 982, 39, 1005);
+			Data.birdFlatNight = makeImage(fullImage, 62, 982, 95, 1005);
+			Data.birdDownNight = makeImage(fullImage, 118, 982, 151, 1005);
+			Data.birdDeadNight = makeImage(fullImage, 297, 982, 327, 1020);
 
+			
 			// Misc.
 			Data.getReady = makeImage(fullImage, 584, 116, 780, 180);
 			Data.instructions = makeImage(fullImage, 584, 175, 700, 283);
@@ -111,11 +128,17 @@ public abstract class Data{
 			// Foreground
 			Data.ground.setLocation(0, 400);
 			
-			// Bird
-			Data.birdFlat.setLocation(-100, 0);
-			Data.birdDown.setLocation(-100, 0);
-			Data.birdUp.setLocation(-100, 0);
-			Data.birdDead.setLocation(70, 371);
+			// Bird Parts
+			//Day
+			Data.birdFlatDay.setLocation(-100, 0);
+			Data.birdDownDay.setLocation(-100, 0);
+			Data.birdUpDay.setLocation(-100, 0);
+			Data.birdDeadDay.setLocation(70, 371);
+			//Night
+			Data.birdFlatNight.setLocation(-100, 0);
+			Data.birdDownNight.setLocation(-100, 0);
+			Data.birdUpNight.setLocation(-100, 0);
+			Data.birdDeadNight.setLocation(70, 371);
 			
 			// Misc.
 			Data.getReady.setLocation(45, 130);
