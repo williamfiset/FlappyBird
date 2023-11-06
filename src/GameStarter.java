@@ -36,7 +36,7 @@ public class GameStarter{
 		   	flappyBirdApplet.start();
 	   	
 	   	// Add title
-	   	appletFrame.setTitle("Flappy Bird - Micah & Will");
+	   	appletFrame.setTitle("StrataBird - Wade");
 
 	}
 }

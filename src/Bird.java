@@ -20,7 +20,12 @@ public class Bird extends FlappyBird{
 	public Bird(int startingX, int startingY){
 		
 		// Creates a thin invisible rectangle on top of the bird as it flys for collision detection
-		birdRect = new GRectangle(x, y , (int) Data.birdFlatDay.getWidth(), (int) Data.birdFlatDay.getHeight());
+		if (isNight){
+			birdRect = new GRectangle(x, y , (int) Data.birdFlatDay.getWidth(), (int) Data.birdFlatDay.getHeight());
+		}
+		else{
+			birdRect = new GRectangle(x, y , (int) Data.birdFlatNight.getWidth(), (int) Data.birdFlatNight.getHeight());
+		}
 
 		this.x = startingX;
 		this.y = startingY;
@@ -48,12 +53,21 @@ public class Bird extends FlappyBird{
 		//Day
 		Data.birdDownDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
 		Data.birdFlatDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
-		Data.birdUpDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
-
+		Data.birdUpDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);		
 		//Night
 		Data.birdDownNight.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
 		Data.birdFlatNight.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
 		Data.birdUpNight.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
+
+		//scale bird size based on Y location
+		//day
+		Data.birdDownDay.setSize((getY() / 10) * 1.5, (getY() / 10));
+		Data.birdFlatDay.setSize((getY() / 10)* 1.5, (getY() / 10));
+		Data.birdUpDay.setSize((getY() / 10) * 1.5, (getY() / 10));
+		//night
+		Data.birdDownNight.setSize((getY() / 10) * 1.5, (getY() / 10));
+		Data.birdFlatNight.setSize((getY() / 10)* 1.5, (getY() / 10));
+		Data.birdUpNight.setSize((getY() / 10) * 1.5, (getY() / 10));
 		
 		if(FlappyBird.currentMode != 2){
 			
@@ -84,7 +98,7 @@ public class Bird extends FlappyBird{
 	/** Makes sure that the bird doesn't go off screen **/
 	public void capHeight(){
 		
-		if(getY() + hoverCounter > -16)
+		if(getY() > 50)
 			downwardSpeed = 10;
 
 	}
@@ -133,12 +147,12 @@ public class Bird extends FlappyBird{
 
 		if(hoverDirectionUp){
 			hoverCounter--;
-			if(hoverCounter == -5)
+			if(hoverCounter == -1)
 				hoverDirectionUp = false;
 		}
 		else{
 			hoverCounter++;
-			if(hoverCounter == 5)
+			if(hoverCounter == 1)
 				hoverDirectionUp = true;
 		}
 
@@ -148,5 +162,8 @@ public class Bird extends FlappyBird{
 	public void setX(int x){ this.x = x; }
 	public int getX(){ return this.x; }
 	public int getY(){ return this.y; }
+
+    public void scale(double d) {
+    }
 
 }
