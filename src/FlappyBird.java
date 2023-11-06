@@ -57,7 +57,10 @@ public class FlappyBird extends GraphicsProgram {
 		isNight = (Math.random() < 0.5);
 
 		// Adds starting images to screen
-		add(Data.background[isNight ? 1 : 0]);
+		add(Data.backgroundDay);
+		add(Data.backgroundNight);
+		chagneNight();
+
 		for (int i = 0; i < 4; i++) {
 			add(Data.pipeTop[i]);
 			add(Data.pipeBottom[i]);
@@ -228,20 +231,8 @@ public class FlappyBird extends GraphicsProgram {
 	//change night function
 	public void chagneNight() {
 		isNight = !isNight;
-		remove(Data.background[isNight ? 0 : 1]);
-		add(Data.background[isNight ? 1 : 0]);
-		//re draw the pipes as the new background is now on top
-			for (int n = 0; n < 4; n++) {
-				remove(Data.pipeTop[n]);
-				remove(Data.pipeBottom[n]);
-				add(Data.pipeTop[n]);
-				add(Data.pipeBottom[n]);
-				}
-		//re-add the ground
-		remove(Data.ground);
-		add(Data.ground);
-		//re-add the score to the screen
-		drawScore();			
+		Data.backgroundDay.setVisible(isNight);
+		Data.backgroundNight.setVisible(!isNight);
 	}
 
 	/** Resets all 4 set of pipes to their starting locations **/
