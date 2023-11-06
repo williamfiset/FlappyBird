@@ -22,6 +22,7 @@ public class FlappyBird extends GraphicsProgram {
 	static int currentMode = 0; // 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
 	static int score = 0;
 	boolean isNight = true;
+	int scoreChange = 0;
 
 	// award for the space between pipes
 	int[] pipeSpaceAward = {0,0,0,0};
@@ -51,6 +52,9 @@ public class FlappyBird extends GraphicsProgram {
 
 		// Sets
 		resetPipes();
+
+		//randomize night 
+		isNight = (Math.random() < 0.5);
 
 		// Adds starting images to screen
 		add(Data.background[isNight ? 1 : 0]);
@@ -199,6 +203,12 @@ public class FlappyBird extends GraphicsProgram {
 				// award points for each pipe that you pass
 				 score = score + pipeSpaceAward[i];
 				drawScore();
+
+				// calls isNight every 250 points
+				if ((int) score / 250 > scoreChange) {
+					scoreChange = (int)score / 250;
+					chagneNight();
+				}
 				Music.playSound("Music/coinSound.wav");
 			}
 
@@ -213,6 +223,25 @@ public class FlappyBird extends GraphicsProgram {
 
 		}
 
+	}
+
+	//change night function
+	public void chagneNight() {
+		isNight = !isNight;
+		remove(Data.background[isNight ? 0 : 1]);
+		add(Data.background[isNight ? 1 : 0]);
+		//re draw the pipes as the new background is now on top
+			for (int n = 0; n < 4; n++) {
+				remove(Data.pipeTop[n]);
+				remove(Data.pipeBottom[n]);
+				add(Data.pipeTop[n]);
+				add(Data.pipeBottom[n]);
+				}
+		//re-add the ground
+		remove(Data.ground);
+		add(Data.ground);
+		//re-add the score to the screen
+		drawScore();			
 	}
 
 	/** Resets all 4 set of pipes to their starting locations **/
@@ -257,6 +286,10 @@ public class FlappyBird extends GraphicsProgram {
 			remove(Data.pipeDigits[i][n]);
 
 		}
+	
+		chagneNight();
+		scoreChange = 0;
+		//randomize night 
 
 		FlappyBird.currentMode = 3;
 
