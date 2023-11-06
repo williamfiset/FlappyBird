@@ -16,14 +16,15 @@ public abstract class Data{
 
 		public static BufferedImage fullImage = null;
 
-		public static GImage background, ground,
+		public static GImage ground,
 					     birdFlat, birdUp, birdDown, birdDead,
 					     getReady, gameOver, instructions, scoreboard, replayButton,
 					     bronzeMedal, silverMedal, goldMedal, platinumMedal, new_;
 
 		public static GImage[] pipeTop = new  GImage[4], pipeBottom = new GImage[4],
 				medNums = new  GImage[10], bigNums = new GImage[10],  
-				scoreDigits = new GImage[10], scoreBoardDigits = new GImage[20];
+				scoreDigits = new GImage[10], scoreBoardDigits = new GImage[20],
+				background = new GImage[2];
 				
 		public static GImage[][] pipeDigits = new GImage[4][10];
 	    
@@ -43,7 +44,8 @@ public abstract class Data{
 			catch (IOException e) {	e.printStackTrace(); }
 			
 			// Background
-			Data.background = makeImage(fullImage, 0, 0, 288, 512);
+			Data.background[0] = makeImage(fullImage, 0, 0, 288, 512);
+			Data.background[1] = makeImage(fullImage, 292, 0, 580, 512);
 
 			// Pipes
 			for(int i = 0; i < 4; i++){

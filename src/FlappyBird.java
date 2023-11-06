@@ -21,6 +21,7 @@ public class FlappyBird extends GraphicsProgram {
 
 	static int currentMode = 0; // 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
 	static int score = 0;
+	boolean isNight = true;
 
 	// award for the space between pipes
 	int[] pipeSpaceAward = {0,0,0,0};
@@ -52,7 +53,7 @@ public class FlappyBird extends GraphicsProgram {
 		resetPipes();
 
 		// Adds starting images to screen
-		add(Data.background);
+		add(Data.background[isNight ? 1 : 0]);
 		for (int i = 0; i < 4; i++) {
 			add(Data.pipeTop[i]);
 			add(Data.pipeBottom[i]);
