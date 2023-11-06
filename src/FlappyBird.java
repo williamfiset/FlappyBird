@@ -139,7 +139,7 @@ public class FlappyBird extends GraphicsProgram {
 				bird.draw(this);
 
 			// This controls the speed of the game
-			pause(40);
+			pause(bird.getY() / 4);
 
 		}
 	}
@@ -183,6 +183,7 @@ public class FlappyBird extends GraphicsProgram {
 			FlappyBird.currentMode = 1;
 			remove(Data.getReady);
 			remove(Data.instructions);
+
 		}
 		// If the current mode is "Playing", the flapping sound effect is played and it
 		// ensures that the bird isn't above the top of the screen
@@ -293,7 +294,7 @@ public class FlappyBird extends GraphicsProgram {
 		// generate random number between 25 and 100
 		pipeSpace = (int) (Math.random() * (max - min + 1)) + min;
 		// saves the award for the space between pipes
-		pipeSpaceAward[i] = max - pipeSpace;	
+		pipeSpaceAward[i] = (max - pipeSpace);
 		int randomAltitude = (int) (Math.random() * (GROUND_LEVEL / 2)) - 101;
 
 		// moves the pipes to the new location
@@ -332,12 +333,15 @@ public class FlappyBird extends GraphicsProgram {
 		remove(Data.birdDownDay);
 		remove(Data.birdFlatDay);
 		add(Data.birdDeadDay);
+		Data.birdDeadDay.setSize(36.7 * 1.5, 36.7);
+
 
 		// Bird Night
 		remove(Data.birdUpNight);
 		remove(Data.birdDownNight);
 		remove(Data.birdFlatNight);
 		add(Data.birdDeadNight);
+		Data.birdDeadNight.setSize(36.7 * 1.5, 36.7);
 
 		// Foreground
 		add(Data.ground);
