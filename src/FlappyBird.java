@@ -71,6 +71,9 @@ public class FlappyBird extends GraphicsProgram {
 		}
 		add(Data.ground);
 		add(Data.getReady);
+		if (score >= scoreInterval * 100){
+			add(Data.birdLogo);
+		}
 		add(Data.instructions);
 		add(Data.birdUpNight);
 		add(Data.birdUpDay);
@@ -183,6 +186,7 @@ public class FlappyBird extends GraphicsProgram {
 			FlappyBird.currentMode = 1;
 			remove(Data.getReady);
 			remove(Data.instructions);
+			remove(Data.birdLogo);
 
 		}
 		// If the current mode is "Playing", the flapping sound effect is played and it
@@ -354,7 +358,9 @@ public class FlappyBird extends GraphicsProgram {
 		// Award medal if applicable
 
 		// Determines the interval for each medal
-		if (score >= scoreInterval * 40)
+		if (score >= scoreInterval * 100)
+			add(Data.birdMedal);
+		else if (score >= scoreInterval * 40)
 			add(Data.platinumMedal);
 		else if (score >= scoreInterval * 30)
 			add(Data.goldMedal);
@@ -377,8 +383,7 @@ public class FlappyBird extends GraphicsProgram {
 		else if (score > highScore) {
 			highScoreFile.updateHighScore(Integer.toString(score));
 			drawBoardScore(1, score);
-			Data.new_.setLocation(164, 256);
-
+			Data.new_.setLocation(164, 256);;
 			// Draw old high score
 		} else {
 			drawBoardScore(1, highScore);
@@ -411,10 +416,15 @@ public class FlappyBird extends GraphicsProgram {
 		// Game setup
 		resetPipes();
 		add(Data.getReady);
+		if (score >= scoreInterval * 100){
+			add(Data.birdLogo);
+		}
 		add(Data.instructions);
 
 		// Remove elements from screen
-		if (score >= scoreInterval * 40)
+		if (score >= scoreInterval * 100)
+			remove(Data.birdMedal);
+		else if (score >= scoreInterval * 40)
 			remove(Data.platinumMedal);
 		else if (score >= scoreInterval * 30)
 			remove(Data.goldMedal);

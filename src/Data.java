@@ -16,7 +16,7 @@ public abstract class Data{
 
 		public static BufferedImage fullImage = null;
 
-		public static GImage ground,
+		public static GImage ground, birdLogo, birdMedal,
 					     birdFlatDay, birdUpDay, birdDownDay, birdDeadDay, 
 						 birdFlatNight, birdUpNight, birdDownNight, birdDeadNight, 
 						 backgroundDay, backgroundNight,
@@ -111,7 +111,8 @@ public abstract class Data{
 			Data.instructions = makeImage(fullImage, 584, 175, 700, 283);
 			Data.gameOver = makeImage(fullImage, 780, 116, 990, 180);
 			Data.replayButton = makeImage(fullImage, 705, 234, 816, 303);
-
+			Data.birdLogo = makeImage(fullImage, 708, 300,840 , 775);
+			
 			// Score Board
 			Data.scoreboard = makeImage(fullImage, 0, 515, 237, 643);
 			Data.bronzeMedal = makeImage(fullImage, 224, 954, 268, 998);
@@ -119,7 +120,9 @@ public abstract class Data{
 			Data.goldMedal = makeImage(fullImage, 242, 564, 286, 608);
 			Data.platinumMedal = makeImage(fullImage, 242, 516, 286, 560);
 			Data.new_ = makeImage(fullImage, 224, 1002, 256, 1016);
-
+			//make birdmedal 1/3 the zie of birdlogo
+			Data.birdMedal = makeImage(fullImage, 708, 300,840 , 775);
+			Data.birdMedal.setSize(Data.birdMedal.getWidth()/3, Data.birdMedal.getHeight()/3);
 		}
 		
 		/** Set the location of images **/
@@ -141,9 +144,10 @@ public abstract class Data{
 			Data.birdDeadNight.setLocation(70, 371);
 			
 			// Misc.
-			Data.getReady.setLocation(45, 130);
-			Data.instructions.setLocation(85, 210);
-			Data.gameOver.setLocation(40, 130);
+			Data.getReady.setLocation(45, 170);
+			Data.instructions.setLocation(80, 234);
+			Data.birdLogo.setLocation(55, 60);
+			Data.gameOver.setLocation(40, 100);
 			Data.replayButton.setLocation(85, 330);
 
 			// Score Board
@@ -152,7 +156,7 @@ public abstract class Data{
 			Data.silverMedal.setLocation(57, 240);
 			Data.goldMedal.setLocation(57, 240);
 			Data.platinumMedal.setLocation(57, 240);
-
+			Data.birdMedal.setLocation(55, 245);
 		}
 		
 		/** Used to help get the sub-images from the sprite-sheet **/
