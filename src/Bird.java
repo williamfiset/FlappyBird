@@ -42,6 +42,10 @@ public class Bird extends FlappyBird{
 		for (GImage pipeImage : Data.pipeBottomDay)
 			if(birdRect.intersects( new GRectangle(pipeImage.getBounds())))
 				return true;
+		
+		for (GImage pipeImage : Data.pipeMiddleDay)
+			if(birdRect.intersects( new GRectangle(pipeImage.getBounds())))
+				return true;
 
 		return false;
 	}
@@ -98,6 +102,7 @@ public class Bird extends FlappyBird{
 	/** Makes sure that the bird doesn't go off screen **/
 	public void capHeight(){
 		
+		// cap at top of screen
 		if(getY() > 50)
 			downwardSpeed = 10;
 
