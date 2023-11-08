@@ -32,7 +32,7 @@ public class FlappyBird extends GraphicsProgram {
 	int pipeSpace = 0;
 	
 	// min and max for the space between pipes
-	int min = 38, max = 137;
+	int min = 125, max = 224;
 	int scoreInterval = (max + min) / 2;
 
 	@Override
@@ -66,8 +66,11 @@ public class FlappyBird extends GraphicsProgram {
 			// Adds pipes to screen
 			add(Data.pipeTopDay[i]);
 			add(Data.pipeBottomDay[i]);
+			add(Data.pipeMiddleDay[i]);
+
 			add(Data.pipeTopNight[i]);
 			add(Data.pipeBottomNight[i]);
+			add(Data.pipeMiddleNight[i]);
 		}
 		add(Data.ground);
 		add(Data.getReady);
@@ -108,7 +111,7 @@ public class FlappyBird extends GraphicsProgram {
 				bird.fly();
 
 				// Checks if you hit the ground
-				if (bird.getY() + bird.hoverCounter > FlappyBird.GROUND_LEVEL - Data.birdFlatDay.getHeight()) {
+				if (bird.getY() > FlappyBird.GROUND_LEVEL - Data.birdFlatDay.getHeight()) {
 					Music.playSound("Music/falling.wav");
 					bird.downwardSpeed = 0;
 					endRound();
@@ -138,12 +141,12 @@ public class FlappyBird extends GraphicsProgram {
 			}
 
 			// Draw the bird with his flappy little wings
-			if (FlappyBird.currentMode < 3)
-				bird.draw(this);
+				if (FlappyBird.currentMode < 3)
+					bird.draw(this);
 
-			// This controls the speed of the game
-			pause(bird.getY() / 4);
-
+				// This controls the speed of the game
+					pause(40);
+				
 		}
 	}
 
@@ -205,8 +208,11 @@ public class FlappyBird extends GraphicsProgram {
 			// Move pipes
 			Data.pipeBottomDay[i].move(-4, 0);
 			Data.pipeTopDay[i].move(-4, 0);
+			Data.pipeMiddleDay[i].move(-4, 0);
+
 			Data.pipeBottomNight[i].move(-4, 0);
 			Data.pipeTopNight[i].move(-4, 0);
+			Data.pipeMiddleNight[i].move(-4, 0);
 
 			// Draw the score for the next pipe
 			drawPipeScore(i, (int) Data.pipeBottomDay[i].getX() + (PIPE_WIDTH / 2) - 6);
@@ -230,12 +236,21 @@ public class FlappyBird extends GraphicsProgram {
 
 			// Re-spawns the pipe if they have already slid across the screen
 			if (Data.pipeBottomDay[i].getX() < -(SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2)) {
+				
 				Data.pipeTopDay[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
 				Data.pipeBottomDay[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
 				(GROUND_LEVEL / 2));
+				//create middle pipe between top and bottom
+				Data.pipeMiddleDay[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
+				(GROUND_LEVEL / 2) - 118);
+				
 				Data.pipeTopNight[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
 				Data.pipeBottomNight[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
 				(GROUND_LEVEL / 2));
+				//create middle pipe between top and bottom
+				Data.pipeMiddleNight[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
+				(GROUND_LEVEL / 2) - 118);
+
 			// Move pipe digits
 				randomizePipes(i);
 			}
@@ -269,9 +284,11 @@ public class FlappyBird extends GraphicsProgram {
 			//Day
 			Data.pipeTopDay[i].setVisible(isNight);
 			Data.pipeBottomDay[i].setVisible(isNight);
+			Data.pipeMiddleDay[i].setVisible(isNight);
 			//Night
 			Data.pipeTopNight[i].setVisible(!isNight);
 			Data.pipeBottomNight[i].setVisible(!isNight);
+			Data.pipeMiddleNight[i].setVisible(!isNight);
 
 		}
 	}
@@ -286,9 +303,17 @@ public class FlappyBird extends GraphicsProgram {
 			Data.pipeTopDay[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
 			Data.pipeBottomDay[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2));
+			//create middle pipe between top and bottom
+			Data.pipeMiddleDay[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
+					(GROUND_LEVEL / 2) - 118);
+
 			Data.pipeTopNight[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
 			Data.pipeBottomNight[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2));
+			//create middle pipe between top and bottom
+			Data.pipeMiddleNight[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
+					(GROUND_LEVEL / 2) - 118);
+
 			randomizePipes(i);
 		}
 	}
@@ -304,17 +329,22 @@ public class FlappyBird extends GraphicsProgram {
 		// moves the pipes to the new location
 		Data.pipeTopDay[i].move(0, randomAltitude - pipeSpace);
 		Data.pipeBottomDay[i].move(0, randomAltitude + pipeSpace);
+		//create middle pipe centered exactly in the middle of the top and bottom
+		Data.pipeMiddleDay[i].move(0, randomAltitude + 56);
+
+
 		Data.pipeTopNight[i].move(0, randomAltitude - pipeSpace);
 		Data.pipeBottomNight[i].move(0, randomAltitude + pipeSpace);
+		//create middle pipe centered exactly in the middle of the top and bottom
+		Data.pipeMiddleNight[i].move(0, randomAltitude+ 56);
 
 		// bottom of the top pipe saved to variable
 		int bottomOfTopPipe = (int) Data.pipeTopDay[i].getY() + 320;
 		// top of the bottom pipe saved to variable
 		int topOfBottomPipe = (int) Data.pipeBottomDay[i].getY();
 		// center of the space between the pipes	
-		pipeSpaceCenter[i] = (bottomOfTopPipe + topOfBottomPipe) / 2;		
-
-		// draws the score for the next pipe
+		pipeSpaceCenter[i] = (bottomOfTopPipe + topOfBottomPipe) / 2;	
+			
 	}
 
 	/** Displays the graphics for the end of a round **/
@@ -337,7 +367,7 @@ public class FlappyBird extends GraphicsProgram {
 		remove(Data.birdDownDay);
 		remove(Data.birdFlatDay);
 		add(Data.birdDeadDay);
-		Data.birdDeadDay.setSize(36.7 * 1.5, 36.7);
+		Data.birdDeadDay.setSize(27,36);
 
 
 		// Bird Night
@@ -345,7 +375,7 @@ public class FlappyBird extends GraphicsProgram {
 		remove(Data.birdDownNight);
 		remove(Data.birdFlatNight);
 		add(Data.birdDeadNight);
-		Data.birdDeadNight.setSize(36.7 * 1.5, 36.7);
+		Data.birdDeadNight.setSize(27,36);
 
 		// Foreground
 		add(Data.ground);
@@ -408,7 +438,6 @@ public class FlappyBird extends GraphicsProgram {
 		// Adjust Variables
 		bird.setY(240);
 		bird.downwardSpeed = 0;
-		bird.hoverCounter = 0;
 
 		// Reset mode to "Get Ready"
 		FlappyBird.currentMode = 0;

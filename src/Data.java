@@ -26,7 +26,8 @@ public abstract class Data{
 		public static GImage[] pipeTopDay = new  GImage[4], pipeBottomDay = new GImage[4],
 				pipeTopNight = new  GImage[4], pipeBottomNight = new GImage[4],
 				medNums = new  GImage[10], bigNums = new GImage[10],  
-				scoreDigits = new GImage[10], scoreBoardDigits = new GImage[20];
+				scoreDigits = new GImage[10], scoreBoardDigits = new GImage[20],
+				pipeMiddleDay = new GImage[4], pipeMiddleNight = new GImage[4];
 				
 				
 		public static GImage[][] pipeDigits = new GImage[4][10];
@@ -55,11 +56,13 @@ public abstract class Data{
 				//Green pipes (for day mode)
 				Data.pipeTopNight[i] = makeImage(fullImage, 112, 646, 164, 965);
 				Data.pipeBottomNight[i] = makeImage(fullImage, 168, 646, 220, 965);
+				Data.pipeMiddleNight[i] = makeImage(fullImage, 300, 869, 352, 980);
 
 				//Red pipes on the sprite image to the far left of the image
 				Data.pipeTopDay[i] = makeImage(fullImage, 0, 646, 52, 965);
 				Data.pipeBottomDay[i] = makeImage(fullImage, 56, 644, 108, 963);
-				
+				Data.pipeMiddleDay[i] = makeImage(fullImage, 358, 869, 410, 980);
+
 				// Score Digits
 				for (int n = 0; n < 10; n++){
 				Data.pipeDigits[i][n] = makeImage(fullImage, 274, 612, 288, 632);

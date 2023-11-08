@@ -13,22 +13,16 @@ public class Bird extends FlappyBird{
 
 	GRectangle birdRect;
 
-	protected int downwardSpeed = 0, hoverCounter = 0, x, y;
+	protected int downwardSpeed = 0, x, y;
 	private int animationCounter = 0;
 	boolean hoverDirectionUp = true;
 
 	public Bird(int startingX, int startingY){
-		
-		// Creates a thin invisible rectangle on top of the bird as it flys for collision detection
-		if (isNight){
-			birdRect = new GRectangle(x, y , (int) Data.birdFlatDay.getWidth(), (int) Data.birdFlatDay.getHeight());
-		}
-		else{
-			birdRect = new GRectangle(x, y , (int) Data.birdFlatNight.getWidth(), (int) Data.birdFlatNight.getHeight());
-		}
 
 		this.x = startingX;
 		this.y = startingY;
+		// Creates a thin invisible rectangle on top of the bird as it flys for collision detection
+		birdRect = new GRectangle(x, y, 25, 30);
 
 	}
 
@@ -42,8 +36,41 @@ public class Bird extends FlappyBird{
 		for (GImage pipeImage : Data.pipeBottomDay)
 			if(birdRect.intersects( new GRectangle(pipeImage.getBounds())))
 				return true;
+		
+		for (GImage pipeImage : Data.pipeMiddleDay)
+			if(birdRect.intersects( new GRectangle(pipeImage.getBounds())))
+				return true;
 
 		return false;
+	}
+
+	public void updateBirdRect() {
+		double newWidth = birdSize() * 1.5;
+		double newHeight = birdSize();
+		birdRect.setSize(newWidth, newHeight);
+		birdRect.setLocation(getX(), getY());
+	}
+
+	public double birdSize(){
+		
+		//scale bird size based on Y location
+
+		double scalingFactor = 7; // Adjust this value to make the bird scale slower
+		double maxSize = 20.0; // Adjust this value to set the maximum size
+		
+		double birdHeight = Math.min((getY() / scalingFactor), maxSize);
+		
+		double birdWidth = birdHeight * 1.5; // Maintain the original proportions
+		
+		Data.birdDownDay.setSize(birdWidth, birdHeight);
+		Data.birdFlatDay.setSize(birdWidth, birdHeight);
+		Data.birdUpDay.setSize(birdWidth, birdHeight);
+		//night
+		Data.birdDownNight.setSize(birdWidth, birdHeight);
+		Data.birdFlatNight.setSize(birdWidth, birdHeight);
+		Data.birdUpNight.setSize(birdWidth, birdHeight);
+
+		return birdHeight;
 	}
 
 	/** Draw bird on screen **/
@@ -51,24 +78,17 @@ public class Bird extends FlappyBird{
 		
 		// Resets the location for all bird images
 		//Day
-		Data.birdDownDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
-		Data.birdFlatDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
-		Data.birdUpDay.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);		
+		Data.birdDownDay.setLocation(FlappyBird.BIRD_X_START, getY());
+		Data.birdFlatDay.setLocation(FlappyBird.BIRD_X_START, getY());
+		Data.birdUpDay.setLocation(FlappyBird.BIRD_X_START, getY());		
 		//Night
-		Data.birdDownNight.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
-		Data.birdFlatNight.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
-		Data.birdUpNight.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
+		Data.birdDownNight.setLocation(FlappyBird.BIRD_X_START, getY());
+		Data.birdFlatNight.setLocation(FlappyBird.BIRD_X_START, getY());
+		Data.birdUpNight.setLocation(FlappyBird.BIRD_X_START, getY());
 
-		//scale bird size based on Y location
-		//day
-		Data.birdDownDay.setSize((getY() / 10) * 1.5, (getY() / 10));
-		Data.birdFlatDay.setSize((getY() / 10)* 1.5, (getY() / 10));
-		Data.birdUpDay.setSize((getY() / 10) * 1.5, (getY() / 10));
-		//night
-		Data.birdDownNight.setSize((getY() / 10) * 1.5, (getY() / 10));
-		Data.birdFlatNight.setSize((getY() / 10)* 1.5, (getY() / 10));
-		Data.birdUpNight.setSize((getY() / 10) * 1.5, (getY() / 10));
-		
+		birdSize();
+		updateBirdRect();
+
 		if(FlappyBird.currentMode != 2){
 			
 			// Proceeds to the next image in the animation
@@ -84,20 +104,16 @@ public class Bird extends FlappyBird{
 	/** Makes the bird move downwards **/
 	public void fly(){
 
-		hoverBird();
-
 		// Move Flappy Bird
-		downwardSpeed -= 1*FlappyBird.currentMode;
+		downwardSpeed -= 1;
 		this.setY( this.getY() - downwardSpeed );
-
-		// Set the new location of the invisible rectangle under the bird, used for collision detection
-		birdRect.setLocation(FlappyBird.BIRD_X_START, getY() + hoverCounter);
 		
  	}
 
 	/** Makes sure that the bird doesn't go off screen **/
 	public void capHeight(){
 		
+		// cap at top of screen
 		if(getY() > 50)
 			downwardSpeed = 10;
 
@@ -140,22 +156,6 @@ public class Bird extends FlappyBird{
 			window.remove(Data.birdFlatNight);
 		}
 		
-	}
-
-	/** Makes the bird appear to hover up and down **/
-	protected void hoverBird(){
-
-		if(hoverDirectionUp){
-			hoverCounter--;
-			if(hoverCounter == -1)
-				hoverDirectionUp = false;
-		}
-		else{
-			hoverCounter++;
-			if(hoverCounter == 1)
-				hoverDirectionUp = true;
-		}
-
 	}
 
 	public void setY(int y){ this.y = y; }
