@@ -25,10 +25,12 @@ public class FlappyBird extends GraphicsProgram {
 	int scoreChange = 0;
 
 	// award for the space between pipes
-	int[][] pipeSpaceAward =  {{0,0,0,0},{0,0,0,0}};
 	// center of the space between pipes
 	int[] pipeSpaceCenter1 = {0,0,0,0};
 	int[] pipeSpaceCenter2 = {0,0,0,0};
+	int[] distance1 = {0,0,0,0};
+	int[] distance2 = {0,0,0,0};
+
 	// space between pipes
 	int pipeSpace = 0;
 	
@@ -226,7 +228,8 @@ public class FlappyBird extends GraphicsProgram {
 			
 			if (Data.pipeBottomDay[i].getX() == BIRD_X_START + 2) {
 				// award points for each pipe that you pass
-				 score = score + pipeSpaceAward[0][i];
+				 score = score + (distance1[i] + distance2[i]) / 2;
+				
 				drawScore();
 
 				// calls isNight every 250 points
@@ -326,7 +329,6 @@ public class FlappyBird extends GraphicsProgram {
 		// generate random number between 25 and 100
 		pipeSpace = (int) (Math.random() * (max - min + 1)) + min;
 		// saves the award for the space between pipes
-		pipeSpaceAward[0][i] = (max - pipeSpace);
 		int randomAltitude = (int) (Math.random() * (GROUND_LEVEL / 2)) - 101;
 
 		// moves the pipes to the new location
@@ -335,9 +337,11 @@ public class FlappyBird extends GraphicsProgram {
 		//create middle pipe centered exactly in the middle of the top and bottom
 		Data.pipeMiddleDay[i].move(0, randomAltitude + 56);
 
-
 		Data.pipeTopNight[i].move(0, randomAltitude - pipeSpace);
 		Data.pipeBottomNight[i].move(0, randomAltitude + pipeSpace);
+
+		//find the center spaces between the pipes:
+
 		//create middle pipe centered exactly in the middle of the top and bottom
 		Data.pipeMiddleNight[i].move(0, randomAltitude+ 56);
 
@@ -355,6 +359,13 @@ public class FlappyBird extends GraphicsProgram {
 		pipeSpaceCenter1[i] = (bottomOfTopPipe + topOfMiddlePipe) / 2;
 		//center of space between bottomOfMiddlePipe and topOfBottomPipe
 		pipeSpaceCenter2[i] = (bottomOfMiddlePipe + topOfBottomPipe) / 2;
+
+		//distance between bottomOfTopPipe and topOfMiddlePipe
+	
+		distance1[i] = topOfMiddlePipe - bottomOfTopPipe;
+		//distance between bottomOfMiddlePipe and topOfBottomPipe
+		distance2[i] = topOfBottomPipe - bottomOfMiddlePipe;
+
 	
 	}
 
@@ -553,8 +564,10 @@ public class FlappyBird extends GraphicsProgram {
 		
 		for (int j = 0; j < 2; j++) {
 			// Initialize variables
-			int tempScore = pipeSpaceAward[0][i], widthScore = -1, digitCounter = 0;
-		
+			int tempScore = 99;
+
+			int widthScore = -1, digitCounter = 0;
+	
 			// Remove the previous score
 			for (int n = 0; n < 2; n++) {
 				remove(pipeDigitsArray[j][i][n]);
@@ -606,7 +619,7 @@ public class FlappyBird extends GraphicsProgram {
 		// Draw the number on screen
 		for (int n = 0; n < digitCounter; n++) {
 			int index = digitCounter - n - 1;
-			Data.scoreDigits[index].setLocation(startPoint, 15);
+			Data.scoreDigits[index].setLocation(startPoint, 430);
 			add(Data.scoreDigits[index]);
 			startPoint += Data.scoreDigits[index].getWidth() + 1;
 		}
