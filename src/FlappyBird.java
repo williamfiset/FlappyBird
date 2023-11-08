@@ -32,7 +32,7 @@ public class FlappyBird extends GraphicsProgram {
 	int pipeSpace = 0;
 	
 	// min and max for the space between pipes
-	int min = 100, max = 200;
+	int min = 125, max = 224;
 	int scoreInterval = (max + min) / 2;
 
 	@Override
@@ -111,7 +111,7 @@ public class FlappyBird extends GraphicsProgram {
 				bird.fly();
 
 				// Checks if you hit the ground
-				if (bird.getY() + bird.hoverCounter > FlappyBird.GROUND_LEVEL - Data.birdFlatDay.getHeight()) {
+				if (bird.getY() > FlappyBird.GROUND_LEVEL - Data.birdFlatDay.getHeight()) {
 					Music.playSound("Music/falling.wav");
 					bird.downwardSpeed = 0;
 					endRound();
@@ -141,12 +141,12 @@ public class FlappyBird extends GraphicsProgram {
 			}
 
 			// Draw the bird with his flappy little wings
-			if (FlappyBird.currentMode < 3)
-				bird.draw(this);
+				if (FlappyBird.currentMode < 3)
+					bird.draw(this);
 
-			// This controls the speed of the game
-			pause(bird.getY() / 4);
-
+				// This controls the speed of the game
+					pause(40);
+				
 		}
 	}
 
@@ -367,7 +367,7 @@ public class FlappyBird extends GraphicsProgram {
 		remove(Data.birdDownDay);
 		remove(Data.birdFlatDay);
 		add(Data.birdDeadDay);
-		Data.birdDeadDay.setSize(36.7 * 1.5, 36.7);
+		Data.birdDeadDay.setSize(27,36);
 
 
 		// Bird Night
@@ -375,7 +375,7 @@ public class FlappyBird extends GraphicsProgram {
 		remove(Data.birdDownNight);
 		remove(Data.birdFlatNight);
 		add(Data.birdDeadNight);
-		Data.birdDeadNight.setSize(36.7 * 1.5, 36.7);
+		Data.birdDeadNight.setSize(27,36);
 
 		// Foreground
 		add(Data.ground);
@@ -438,7 +438,6 @@ public class FlappyBird extends GraphicsProgram {
 		// Adjust Variables
 		bird.setY(240);
 		bird.downwardSpeed = 0;
-		bird.hoverCounter = 0;
 
 		// Reset mode to "Get Ready"
 		FlappyBird.currentMode = 0;
