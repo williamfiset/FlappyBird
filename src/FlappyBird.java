@@ -25,7 +25,7 @@ public class FlappyBird extends GraphicsProgram {
 	int scoreChange = 0;
 
 	// award for the space between pipes
-	int[] pipeSpaceAward = {0,0,0,0};
+	int[][] pipeSpaceAward =  {{0,0,0,0},{0,0,0,0}};
 	// center of the space between pipes
 	int[] pipeSpaceCenter = {0,0,0,0};
 	// space between pipes
@@ -223,7 +223,7 @@ public class FlappyBird extends GraphicsProgram {
 			
 			if (Data.pipeBottomDay[i].getX() == BIRD_X_START + 2) {
 				// award points for each pipe that you pass
-				 score = score + pipeSpaceAward[i];
+				 score = score + pipeSpaceAward[0][i];
 				drawScore();
 
 				// calls isNight every 250 points
@@ -323,7 +323,7 @@ public class FlappyBird extends GraphicsProgram {
 		// generate random number between 25 and 100
 		pipeSpace = (int) (Math.random() * (max - min + 1)) + min;
 		// saves the award for the space between pipes
-		pipeSpaceAward[i] = (max - pipeSpace);
+		pipeSpaceAward[0][i] = (max - pipeSpace);
 		int randomAltitude = (int) (Math.random() * (GROUND_LEVEL / 2)) - 101;
 
 		// moves the pipes to the new location
@@ -537,7 +537,7 @@ public class FlappyBird extends GraphicsProgram {
 	// draws the score for the next pipe on the screen
 	protected void drawPipeScore(int i, int x) {
 		// Initialize variables
-		int tempScore = pipeSpaceAward[i], widthScore = -1, digitCounter = 0;
+		int tempScore = pipeSpaceAward[0][i], widthScore = -1, digitCounter = 0;
 
 		// Remove the previous score
 		for (int n = 0; n < 2; n++) {
