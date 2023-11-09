@@ -30,7 +30,9 @@ public abstract class Data{
 				pipeMiddleDay = new GImage[4], pipeMiddleNight = new GImage[4];
 				
 				
-		public static GImage[][] pipeDigits = new GImage[4][10];
+		public static GImage[][] pipeDigits1 = new GImage[4][10],	
+		pipeDigits2 = new GImage[4][10];
+
 	    
 	  /** Loads and sets the location of all the images **/
 		public static void init(){
@@ -65,7 +67,8 @@ public abstract class Data{
 
 				// Score Digits
 				for (int n = 0; n < 10; n++){
-				Data.pipeDigits[i][n] = makeImage(fullImage, 274, 612, 288, 632);
+				Data.pipeDigits1[i][n] = makeImage(fullImage, 274, 612, 288, 632);
+				Data.pipeDigits2[i][n] = makeImage(fullImage, 274, 612, 288, 632);
 				}
 			}
 

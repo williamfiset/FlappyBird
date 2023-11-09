@@ -114,7 +114,7 @@ public class Bird extends FlappyBird{
 	public void capHeight(){
 		
 		// cap at top of screen
-		if(getY() > 50)
+		if(getY() > 20)
 			downwardSpeed = 10;
 
 	}
