@@ -148,7 +148,6 @@ public class FlappyBird extends GraphicsProgram {
 			// Draw the bird with his flappy little wings
 				if (FlappyBird.currentMode < 3)
 					player1.draw(this);
-
 				// This controls the speed of the game
 					pause(40);
 				
@@ -279,19 +278,7 @@ public class FlappyBird extends GraphicsProgram {
 	//change night function
 	public void changeNight() {
 		isNight = !isNight;
-		// Change bird
-			//Player 1
-			Data.player1Up.setVisible(isNight);
-			Data.player1Down.setVisible(isNight);
-			Data.player1Flat.setVisible(isNight);
-			Data.player1Dead.setVisible(isNight);
-			//Player 2
-			Data.player2Up.setVisible(!isNight);
-			Data.player2Down.setVisible(!isNight);
-			Data.player2Flat.setVisible(!isNight);
-			Data.player2Dead.setVisible(!isNight);
-
-
+		// Change background
 		Data.backgroundDay.setVisible(isNight);
 		Data.backgroundNight.setVisible(!isNight);
 
@@ -397,7 +384,7 @@ public class FlappyBird extends GraphicsProgram {
 
 		FlappyBird.currentMode = 3;
 
-		// Bird Day
+		// Player 1
 		remove(Data.player1Up);
 		remove(Data.player1Down);
 		remove(Data.player1Flat);
@@ -405,12 +392,12 @@ public class FlappyBird extends GraphicsProgram {
 		Data.player1Dead.setSize(27,36);
 
 
-		// Bird Night
-		remove(Data.player2Up);
-		remove(Data.player2Down);
-		remove(Data.player2Flat);
-		add(Data.player2Dead);
-		Data.player2Dead.setSize(27,36);
+		// Player 2
+		// remove(Data.player2Up);
+		// remove(Data.player2Down);
+		// remove(Data.player2Flat);
+		// add(Data.player2Dead);
+		// Data.player2Dead.setSize(27,36);
 
 		// Foreground
 		add(Data.ground);

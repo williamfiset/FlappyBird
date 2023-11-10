@@ -48,7 +48,7 @@ public class Bird extends FlappyBird{
 		double newWidth = birdSize() * 1.5;
 		double newHeight = birdSize();
 		birdRect.setSize(newWidth, newHeight);
-		birdRect.setLocation(getX(), getY());
+		birdRect.setLocation(getX(), this.getY());
 	}
 
 	public double birdSize(){
@@ -58,14 +58,14 @@ public class Bird extends FlappyBird{
 		double scalingFactor = 7; // Adjust this value to make the bird scale slower
 		double maxSize = 20.0; // Adjust this value to set the maximum size
 		
-		double birdHeight = Math.min((getY() / scalingFactor), maxSize);
+		double birdHeight = Math.min((this.getY() / scalingFactor), maxSize);
 		
 		double birdWidth = birdHeight * 1.5; // Maintain the original proportions
 		
 		Data.player1Down.setSize(birdWidth, birdHeight);
 		Data.player1Flat.setSize(birdWidth, birdHeight);
 		Data.player1Up.setSize(birdWidth, birdHeight);
-		//Player 2
+		//night
 		Data.player2Down.setSize(birdWidth, birdHeight);
 		Data.player2Flat.setSize(birdWidth, birdHeight);
 		Data.player2Up.setSize(birdWidth, birdHeight);
@@ -77,14 +77,15 @@ public class Bird extends FlappyBird{
 	public void draw(GraphicsProgram window){
 		
 		// Resets the location for all bird images
-		//Player 1
-		Data.player1Down.setLocation(FlappyBird.BIRD_X_START, getY());
-		Data.player1Flat.setLocation(FlappyBird.BIRD_X_START, getY());
-		Data.player1Up.setLocation(FlappyBird.BIRD_X_START, getY());		
-		//Player 2
-		Data.player2Down.setLocation(FlappyBird.BIRD_X_START, getY());
-		Data.player2Flat.setLocation(FlappyBird.BIRD_X_START, getY());
-		Data.player2Up.setLocation(FlappyBird.BIRD_X_START, getY());
+		// Player 1
+			Data.player1Down.setLocation(FlappyBird.BIRD_X_START, this.getY());
+			Data.player1Flat.setLocation(FlappyBird.BIRD_X_START, this.getY());
+			Data.player1Up.setLocation(FlappyBird.BIRD_X_START, this.getY());		
+		// //Player 2
+		// 	Data.player2Down.setLocation(FlappyBird.BIRD_X_START, this.getY());
+		// 	Data.player2Flat.setLocation(FlappyBird.BIRD_X_START, this.getY());
+		// 	Data.player2Up.setLocation(FlappyBird.BIRD_X_START, this.getY());
+		
 
 		birdSize();
 		updateBirdRect();
@@ -123,35 +124,35 @@ public class Bird extends FlappyBird{
 	protected void animateBird(int index, GraphicsProgram window){
 		
 		if(index == 0){
-			//Player 1
+			//Day
 			window.add(Data.player1Flat);
 			window.remove(Data.player1Up);
-			//Player 2
+			//Night
 			window.add(Data.player2Flat);
 			window.remove(Data.player2Up);
 		}
 		else if(index == 1){
-			//Player 1
+			//Day
 			window.add(Data.player1Down);
 			window.remove(Data.player1Flat);
-			//Player 2
-			window.add(Data.player2Down);
+			//Night
+			window.add(Data.player2Flat);
 			window.remove(Data.player2Flat);
 
 		}
 		else if(index == 2){
-			//Player 1
+			//Day
 			window.add(Data.player1Flat);
 			window.remove(Data.player1Down);
-			//Player 2
+			//Night
 			window.add(Data.player2Flat);
 			window.remove(Data.player2Down);
 		}
 		else{
-			//Player 1
+			//Day
 			window.add(Data.player1Up);
 			window.remove(Data.player1Flat);
-			//Player 2
+			//Night
 			window.add(Data.player2Up);
 			window.remove(Data.player2Flat);
 		}
