@@ -16,7 +16,7 @@ public class FlappyBird extends GraphicsProgram {
 
 	final static int SCREEN_WIDTH = 288, SCREEN_HEIGHT = 512, GROUND_LEVEL = 400, PIPE_WIDTH = 52, BIRD_X_START = 68;
 
-	Bird bird;
+	Bird player1;
 	FileHandler highScoreFile;
 
 	static int currentMode = 0; // 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
@@ -50,7 +50,7 @@ public class FlappyBird extends GraphicsProgram {
 		initializeDigits(true);
 
 		// Instantiate Bird
-		bird = new Bird(FlappyBird.BIRD_X_START, 240);
+		player1 = new Bird(FlappyBird.BIRD_X_START, 240);
 
 		// Creates a new fileHanlder to deal with saving to a file
 		highScoreFile = new FileHandler();
@@ -113,12 +113,12 @@ public class FlappyBird extends GraphicsProgram {
 
 			if (FlappyBird.currentMode == 1 || FlappyBird.currentMode == 2) {
 
-				bird.fly();
+				player1.fly();
 
 				// Checks if you hit the ground
-				if (bird.getY() > FlappyBird.GROUND_LEVEL - Data.birdFlatDay.getHeight()) {
+				if (player1.getY() > FlappyBird.GROUND_LEVEL - Data.birdFlatDay.getHeight()) {
 					Music.playSound("Music/falling.wav");
-					bird.downwardSpeed = 0;
+					player1.downwardSpeed = 0;
 					endRound();
 				}
 			}
@@ -129,9 +129,9 @@ public class FlappyBird extends GraphicsProgram {
 				movePipes();
 
 				// Checks if you hit a pipe
-				if (bird.pipeCollision()) {
+				if (player1.pipeCollision()) {
 					Music.playSound("Music/falling.wav");
-					bird.downwardSpeed = Math.min(0, bird.downwardSpeed);
+					player1.downwardSpeed = Math.min(0, player1.downwardSpeed);
 					currentMode = 2;
 				}
 
@@ -147,7 +147,7 @@ public class FlappyBird extends GraphicsProgram {
 
 			// Draw the bird with his flappy little wings
 				if (FlappyBird.currentMode < 3)
-					bird.draw(this);
+					player1.draw(this);
 
 				// This controls the speed of the game
 					pause(40);
@@ -200,7 +200,7 @@ public class FlappyBird extends GraphicsProgram {
 		// If the current mode is "Playing", the flapping sound effect is played and it
 		// ensures that the bird isn't above the top of the screen
 		else if (FlappyBird.currentMode == 1) {
-			bird.capHeight();
+			player1.capHeight();
 			Music.playSound("Music/flap.wav");
 		}
 
@@ -235,7 +235,7 @@ public class FlappyBird extends GraphicsProgram {
 				// award score for each pipe that you pass
 				
 				//if the bird is between the top and middle pipes
-				if (bird.getY() < topOfMiddlePipe[i] + 55.5) {
+				if (player1.getY() < topOfMiddlePipe[i] + 55.5) {
 					score += 100 - distance1[i];
 				}else {
 					score += 100 - distance2[i];
@@ -471,8 +471,8 @@ public class FlappyBird extends GraphicsProgram {
 		changeNight();
 
 		// Adjust Variables
-		bird.setY(240);
-		bird.downwardSpeed = 0;
+		player1.setY(240);
+		player1.downwardSpeed = 0;
 
 		// Reset mode to "Get Ready"
 		FlappyBird.currentMode = 0;
