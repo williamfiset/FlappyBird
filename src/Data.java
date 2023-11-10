@@ -17,8 +17,8 @@ public abstract class Data{
 		public static BufferedImage fullImage = null;
 
 		public static GImage ground, birdLogo, birdMedal,
-					     birdFlatDay, birdUpDay, birdDownDay, birdDeadDay, 
-						 birdFlatNight, birdUpNight, birdDownNight, birdDeadNight, 
+					     player1Flat, player1Up, player1Down, player1Dead, 
+						 player2Flat, player2Up, player2Down, player2Dead, 
 						 backgroundDay, backgroundNight,
 					     getReady, gameOver, instructions, scoreboard, replayButton,
 					     bronzeMedal, silverMedal, goldMedal, platinumMedal, new_;
@@ -100,16 +100,16 @@ public abstract class Data{
 			Data.ground = makeImage(fullImage, 584, 0, 919, 111);
 
 			// Bird Parts 
-			// (red for the day mode)
-			Data.birdUpDay = makeImage(fullImage, 230, 763	,263, 785);	
-			Data.birdFlatDay = makeImage(fullImage, 230, 815, 263,838);
-			Data.birdDownDay = makeImage(fullImage, 230, 867, 263, 891);
-			Data.birdDeadDay = makeImage(fullImage, 367, 982, 397, 1020);
-			// (green for the night mode)
-			Data.birdUpNight = makeImage(fullImage, 6, 982, 39, 1005);
-			Data.birdFlatNight = makeImage(fullImage, 62, 982, 95, 1005);
-			Data.birdDownNight = makeImage(fullImage, 118, 982, 151, 1005);
-			Data.birdDeadNight = makeImage(fullImage, 297, 982, 327, 1020);
+			// (red for the player 1)
+			Data.player1Up = makeImage(fullImage, 230, 763	,263, 785);	
+			Data.player1Flat = makeImage(fullImage, 230, 815, 263,838);
+			Data.player1Down = makeImage(fullImage, 230, 867, 263, 891);
+			Data.player1Dead = makeImage(fullImage, 367, 982, 397, 1020);
+			// (green for the player 2)
+			Data.player2Up = makeImage(fullImage, 6, 982, 39, 1005);
+			Data.player2Flat = makeImage(fullImage, 62, 982, 95, 1005);
+			Data.player2Down = makeImage(fullImage, 118, 982, 151, 1005);
+			Data.player2Dead = makeImage(fullImage, 297, 982, 327, 1020);
 
 			
 			// Misc.
@@ -138,16 +138,16 @@ public abstract class Data{
 			Data.ground.setLocation(0, 400);
 			
 			// Bird Parts
-			//Day
-			Data.birdFlatDay.setLocation(-100, 0);
-			Data.birdDownDay.setLocation(-100, 0);
-			Data.birdUpDay.setLocation(-100, 0);
-			Data.birdDeadDay.setLocation(70, 371);
-			//Night
-			Data.birdFlatNight.setLocation(-100, 0);
-			Data.birdDownNight.setLocation(-100, 0);
-			Data.birdUpNight.setLocation(-100, 0);
-			Data.birdDeadNight.setLocation(70, 371);
+			//Player 1
+			Data.player1Flat.setLocation(-100, 0);
+			Data.player1Down.setLocation(-100, 0);
+			Data.player1Up.setLocation(-100, 0);
+			Data.player1Dead.setLocation(70, 371);
+			//Player 2
+			Data.player2Flat.setLocation(-100, 0);
+			Data.player2Down.setLocation(-100, 0);
+			Data.player2Up.setLocation(-100, 0);
+			Data.player2Dead.setLocation(70, 371);
 			
 			// Misc.
 			Data.getReady.setLocation(45, 170);

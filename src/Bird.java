@@ -62,13 +62,13 @@ public class Bird extends FlappyBird{
 		
 		double birdWidth = birdHeight * 1.5; // Maintain the original proportions
 		
-		Data.birdDownDay.setSize(birdWidth, birdHeight);
-		Data.birdFlatDay.setSize(birdWidth, birdHeight);
-		Data.birdUpDay.setSize(birdWidth, birdHeight);
-		//night
-		Data.birdDownNight.setSize(birdWidth, birdHeight);
-		Data.birdFlatNight.setSize(birdWidth, birdHeight);
-		Data.birdUpNight.setSize(birdWidth, birdHeight);
+		Data.player1Down.setSize(birdWidth, birdHeight);
+		Data.player1Flat.setSize(birdWidth, birdHeight);
+		Data.player1Up.setSize(birdWidth, birdHeight);
+		//Player 2
+		Data.player2Down.setSize(birdWidth, birdHeight);
+		Data.player2Flat.setSize(birdWidth, birdHeight);
+		Data.player2Up.setSize(birdWidth, birdHeight);
 
 		return birdHeight;
 	}
@@ -77,14 +77,14 @@ public class Bird extends FlappyBird{
 	public void draw(GraphicsProgram window){
 		
 		// Resets the location for all bird images
-		//Day
-		Data.birdDownDay.setLocation(FlappyBird.BIRD_X_START, getY());
-		Data.birdFlatDay.setLocation(FlappyBird.BIRD_X_START, getY());
-		Data.birdUpDay.setLocation(FlappyBird.BIRD_X_START, getY());		
-		//Night
-		Data.birdDownNight.setLocation(FlappyBird.BIRD_X_START, getY());
-		Data.birdFlatNight.setLocation(FlappyBird.BIRD_X_START, getY());
-		Data.birdUpNight.setLocation(FlappyBird.BIRD_X_START, getY());
+		//Player 1
+		Data.player1Down.setLocation(FlappyBird.BIRD_X_START, getY());
+		Data.player1Flat.setLocation(FlappyBird.BIRD_X_START, getY());
+		Data.player1Up.setLocation(FlappyBird.BIRD_X_START, getY());		
+		//Player 2
+		Data.player2Down.setLocation(FlappyBird.BIRD_X_START, getY());
+		Data.player2Flat.setLocation(FlappyBird.BIRD_X_START, getY());
+		Data.player2Up.setLocation(FlappyBird.BIRD_X_START, getY());
 
 		birdSize();
 		updateBirdRect();
@@ -123,37 +123,37 @@ public class Bird extends FlappyBird{
 	protected void animateBird(int index, GraphicsProgram window){
 		
 		if(index == 0){
-			//Day
-			window.add(Data.birdFlatDay);
-			window.remove(Data.birdUpDay);
-			//Night
-			window.add(Data.birdFlatNight);
-			window.remove(Data.birdUpNight);
+			//Player 1
+			window.add(Data.player1Flat);
+			window.remove(Data.player1Up);
+			//Player 2
+			window.add(Data.player2Flat);
+			window.remove(Data.player2Up);
 		}
 		else if(index == 1){
-			//Day
-			window.add(Data.birdDownDay);
-			window.remove(Data.birdFlatDay);
-			//Night
-			window.add(Data.birdDownNight);
-			window.remove(Data.birdFlatNight);
+			//Player 1
+			window.add(Data.player1Down);
+			window.remove(Data.player1Flat);
+			//Player 2
+			window.add(Data.player2Down);
+			window.remove(Data.player2Flat);
 
 		}
 		else if(index == 2){
-			//Day
-			window.add(Data.birdFlatDay);
-			window.remove(Data.birdDownDay);
-			//Night
-			window.add(Data.birdFlatNight);
-			window.remove(Data.birdDownNight);
+			//Player 1
+			window.add(Data.player1Flat);
+			window.remove(Data.player1Down);
+			//Player 2
+			window.add(Data.player2Flat);
+			window.remove(Data.player2Down);
 		}
 		else{
-			//Day
-			window.add(Data.birdUpDay);
-			window.remove(Data.birdFlatDay);
-			//Night
-			window.add(Data.birdUpNight);
-			window.remove(Data.birdFlatNight);
+			//Player 1
+			window.add(Data.player1Up);
+			window.remove(Data.player1Flat);
+			//Player 2
+			window.add(Data.player2Up);
+			window.remove(Data.player2Flat);
 		}
 		
 	}

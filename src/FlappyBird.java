@@ -83,8 +83,8 @@ public class FlappyBird extends GraphicsProgram {
 			add(Data.birdLogo);
 		}
 		add(Data.instructions);
-		add(Data.birdUpNight);
-		add(Data.birdUpDay);
+		add(Data.player2Up);
+		add(Data.player1Up);
 
 		// Initializes the images for the running total digits so that it's not null
 		// (Places it out of view)
@@ -116,7 +116,7 @@ public class FlappyBird extends GraphicsProgram {
 				player1.fly();
 
 				// Checks if you hit the ground
-				if (player1.getY() > FlappyBird.GROUND_LEVEL - Data.birdFlatDay.getHeight()) {
+				if (player1.getY() > FlappyBird.GROUND_LEVEL - Data.player1Flat.getHeight()) {
 					Music.playSound("Music/falling.wav");
 					player1.downwardSpeed = 0;
 					endRound();
@@ -280,16 +280,16 @@ public class FlappyBird extends GraphicsProgram {
 	public void changeNight() {
 		isNight = !isNight;
 		// Change bird
-			//Day
-			Data.birdUpDay.setVisible(isNight);
-			Data.birdDownDay.setVisible(isNight);
-			Data.birdFlatDay.setVisible(isNight);
-			Data.birdDeadDay.setVisible(isNight);
-			//Night
-			Data.birdUpNight.setVisible(!isNight);
-			Data.birdDownNight.setVisible(!isNight);
-			Data.birdFlatNight.setVisible(!isNight);
-			Data.birdDeadNight.setVisible(!isNight);
+			//Player 1
+			Data.player1Up.setVisible(isNight);
+			Data.player1Down.setVisible(isNight);
+			Data.player1Flat.setVisible(isNight);
+			Data.player1Dead.setVisible(isNight);
+			//Player 2
+			Data.player2Up.setVisible(!isNight);
+			Data.player2Down.setVisible(!isNight);
+			Data.player2Flat.setVisible(!isNight);
+			Data.player2Dead.setVisible(!isNight);
 
 
 		Data.backgroundDay.setVisible(isNight);
@@ -298,11 +298,11 @@ public class FlappyBird extends GraphicsProgram {
 		for (int i = 0; i < 4; i++) {
 
 			// Change pipes
-			//Day
+			//Player 1
 			Data.pipeTopDay[i].setVisible(isNight);
 			Data.pipeBottomDay[i].setVisible(isNight);
 			Data.pipeMiddleDay[i].setVisible(isNight);
-			//Night
+			//Player 2
 			Data.pipeTopNight[i].setVisible(!isNight);
 			Data.pipeBottomNight[i].setVisible(!isNight);
 			Data.pipeMiddleNight[i].setVisible(!isNight);
@@ -398,19 +398,19 @@ public class FlappyBird extends GraphicsProgram {
 		FlappyBird.currentMode = 3;
 
 		// Bird Day
-		remove(Data.birdUpDay);
-		remove(Data.birdDownDay);
-		remove(Data.birdFlatDay);
-		add(Data.birdDeadDay);
-		Data.birdDeadDay.setSize(27,36);
+		remove(Data.player1Up);
+		remove(Data.player1Down);
+		remove(Data.player1Flat);
+		add(Data.player1Dead);
+		Data.player1Dead.setSize(27,36);
 
 
 		// Bird Night
-		remove(Data.birdUpNight);
-		remove(Data.birdDownNight);
-		remove(Data.birdFlatNight);
-		add(Data.birdDeadNight);
-		Data.birdDeadNight.setSize(27,36);
+		remove(Data.player2Up);
+		remove(Data.player2Down);
+		remove(Data.player2Flat);
+		add(Data.player2Dead);
+		Data.player2Dead.setSize(27,36);
 
 		// Foreground
 		add(Data.ground);
@@ -466,8 +466,8 @@ public class FlappyBird extends GraphicsProgram {
 		// Remove elements from screen
 		remove(Data.replayButton);
 		remove(Data.gameOver);
-		remove(Data.birdDeadDay);
-		remove(Data.birdDeadNight);
+		remove(Data.player1Dead);
+		remove(Data.player2Dead);
 		changeNight();
 
 		// Adjust Variables
