@@ -44,14 +44,14 @@ public class Bird extends FlappyBird{
 		return false;
 	}
 
-	public void updateBirdRect() {
-		double newWidth = birdSize() * 1.5;
-		double newHeight = birdSize();
+	public void updateBirdRect(int player) {
+		double newWidth = this.birdSize(player) * 1.5;
+		double newHeight = this.birdSize(player);
 		birdRect.setSize(newWidth, newHeight);
-		birdRect.setLocation(getX(), this.getY());
+		birdRect.setLocation(this.getX(), this.getY());
 	}
 
-	public double birdSize(){
+	public double birdSize(int player){
 		
 		//scale bird size based on Y location
 
@@ -62,13 +62,15 @@ public class Bird extends FlappyBird{
 		
 		double birdWidth = birdHeight * 1.5; // Maintain the original proportions
 		
-		Data.player1Down.setSize(birdWidth, birdHeight);
-		Data.player1Flat.setSize(birdWidth, birdHeight);
-		Data.player1Up.setSize(birdWidth, birdHeight);
-		//night
-		Data.player2Down.setSize(birdWidth, birdHeight);
-		Data.player2Flat.setSize(birdWidth, birdHeight);
-		Data.player2Up.setSize(birdWidth, birdHeight);
+		if(player == 1){
+			Data.player1Down.setSize(birdWidth, birdHeight);
+			Data.player1Flat.setSize(birdWidth, birdHeight);
+			Data.player1Up.setSize(birdWidth, birdHeight);
+		} else if (player == 2){
+			Data.player2Down.setSize(birdWidth, birdHeight);
+			Data.player2Flat.setSize(birdWidth, birdHeight);
+			Data.player2Up.setSize(birdWidth, birdHeight);
+		}
 
 		return birdHeight;
 	}
@@ -82,16 +84,17 @@ public class Bird extends FlappyBird{
 			Data.player1Down.setLocation(FlappyBird.BIRD1_X_START, this.getY());
 			Data.player1Flat.setLocation(FlappyBird.BIRD1_X_START, this.getY());
 			Data.player1Up.setLocation(FlappyBird.BIRD1_X_START, this.getY());
+			birdSize(1);
+			updateBirdRect(1);
 		} else if (player == 2) {
 			// Resets the location for player 2 bird images
 			Data.player2Down.setLocation(FlappyBird.BIRD2_X_START, this.getY());
 			Data.player2Flat.setLocation(FlappyBird.BIRD2_X_START, this.getY());
 			Data.player2Up.setLocation(FlappyBird.BIRD2_X_START, this.getY());
+			birdSize(2);
+			updateBirdRect(2);
 		}
-
-		birdSize();
-		updateBirdRect();
-
+		
 		if(FlappyBird.currentMode != 2){
 			
 			// Proceeds to the next image in the animation

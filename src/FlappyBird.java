@@ -203,6 +203,7 @@ public class FlappyBird extends GraphicsProgram {
 		// ensures that the bird isn't above the top of the screen
 		else if (FlappyBird.currentMode == 1) {
 			player1.capHeight();
+
 			Music.playSound("Music/flap.wav");
 		}
 
@@ -406,12 +407,12 @@ public class FlappyBird extends GraphicsProgram {
 		Data.player1Dead.setSize(27,36);
 
 
-		// Player 2
-		// remove(Data.player2Up);
-		// remove(Data.player2Down);
-		// remove(Data.player2Flat);
-		// add(Data.player2Dead);
-		// Data.player2Dead.setSize(27,36);
+		//Player 2
+		remove(Data.player2Up);
+		remove(Data.player2Down);
+		remove(Data.player2Flat);
+		add(Data.player2Dead);
+		Data.player2Dead.setSize(27,36);
 
 		// Foreground
 		add(Data.ground);
