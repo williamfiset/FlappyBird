@@ -14,9 +14,10 @@ import java.awt.event.*;
 
 public class FlappyBird extends GraphicsProgram {
 
-	final static int SCREEN_WIDTH = 288, SCREEN_HEIGHT = 512, GROUND_LEVEL = 400, PIPE_WIDTH = 52, BIRD_X_START = 68;
+	final static int SCREEN_WIDTH = 288, SCREEN_HEIGHT = 512, GROUND_LEVEL = 400, PIPE_WIDTH = 52, 
+	BIRD1_X_START = 68, BIRD2_X_START = 36;
 
-	Bird player1;
+	Bird player1, player2;
 	FileHandler highScoreFile;
 
 	static int currentMode = 0; // 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
@@ -50,7 +51,8 @@ public class FlappyBird extends GraphicsProgram {
 		initializeDigits(true);
 
 		// Instantiate Bird
-		player1 = new Bird(FlappyBird.BIRD_X_START, 240);
+		player1 = new Bird(FlappyBird.BIRD1_X_START, 240);
+		player2 = new Bird(FlappyBird.BIRD2_X_START, 240);
 
 		// Creates a new fileHanlder to deal with saving to a file
 		highScoreFile = new FileHandler();
@@ -147,7 +149,8 @@ public class FlappyBird extends GraphicsProgram {
 
 			// Draw the bird with his flappy little wings
 				if (FlappyBird.currentMode < 3)
-					player1.draw(this);
+					player1.draw(this,1);
+					player2.draw(this, 2);
 				// This controls the speed of the game
 					pause(40);
 				
@@ -229,7 +232,7 @@ public class FlappyBird extends GraphicsProgram {
 				Data.pipeDigits2[i][0].move(-4, 0);
 				Data.pipeDigits2[i][1].move(-4, 0);
 			
-			if (Data.pipeBottomDay[i].getX() == BIRD_X_START + 2) {
+			if (Data.pipeBottomDay[i].getX() == BIRD1_X_START + 2) {
 				
 				// award score for each pipe that you pass
 				
@@ -239,6 +242,17 @@ public class FlappyBird extends GraphicsProgram {
 				}else {
 					score += 100 - distance2[i];
 				}	
+
+			// if (Data.pipeBottomDay[i].getX() == BIRD2_X_START + 2) {
+				
+			// 	// award score for each pipe that you pass
+				
+			// 	//if the bird is between the top and middle pipes
+			// 	if (player2.getY() < topOfMiddlePipe[i] + 55.5) {
+			// 		score2 += 100 - distance1[i];
+			// 	}else {
+			// 		score2 += 100 - distance2[i];
+			// 	}	
 			
 				drawScore();
 				// calls isNight every 250 points
