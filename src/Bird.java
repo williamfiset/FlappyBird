@@ -111,8 +111,8 @@ public class Bird extends FlappyBird{
 	public void fly(){
 
 		// Move Flappy Bird
-		downwardSpeed -= 1;
-		this.setY( this.getY() - downwardSpeed );
+		this.downwardSpeed -= 1;
+		this.setY( this.getY() - this.downwardSpeed );
 		
  	}
 

@@ -116,6 +116,7 @@ public class FlappyBird extends GraphicsProgram {
 			if (FlappyBird.currentMode == 1 || FlappyBird.currentMode == 2) {
 
 				player1.fly();
+				player2.fly();
 
 				// Checks if you hit the ground
 				if (player1.getY() > FlappyBird.GROUND_LEVEL - Data.player1Flat.getHeight()) {
