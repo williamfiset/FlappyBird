@@ -36,10 +36,12 @@ public class FlappyBird extends GraphicsProgram {
 
 	// space between pipes
 	int pipeSpace = 0;
+	int pipeCounter = 0;
+	double totalPipeScore = 0;
 	
 	// min and max for the space between pipes
 	int min = 150, max = 249;
-	int scoreInterval = max - min + 1;
+	double scoreInterval = 0;
 
 	@Override
 	public void init() {
@@ -245,6 +247,9 @@ public class FlappyBird extends GraphicsProgram {
 				}else {
 					score += 100 - distance2[i];
 				}	
+				pipeCounter += 2;
+				totalPipeScore += distance1[i] + distance2[i];
+				scoreInterval = totalPipeScore / pipeCounter;
 
 			// if (Data.pipeBottomDay[i].getX() == BIRD2_X_START + 2) {
 				
