@@ -124,13 +124,18 @@ public class FlappyBird extends GraphicsProgram {
 				if (player1.getY() > FlappyBird.GROUND_LEVEL - Data.player1Flat.getHeight()) {
 					Music.playSound("Music/falling.wav");
 					player1.downwardSpeed = 0;
+					add(Data.player1Dead);
+					Data.player1Dead.setLocation(70, 370);
 					endRound();
+					player1.animateBird(3, this);
 				}
 				// Checks if player 2you hit the ground
 				if (player2.getY() > FlappyBird.GROUND_LEVEL - Data.player2Flat.getHeight()) {
 					Music.playSound("Music/falling.wav");
 					player2.downwardSpeed = 0;
+					add(Data.player2Dead);
 					endRound();
+					player2.animateBird(3, this);
 				}
 			}
 
@@ -420,16 +425,12 @@ public class FlappyBird extends GraphicsProgram {
 		Data.player1Flat.setLocation(-100, 0);
 		Data.player1Down.setLocation(-100, 0);
 		Data.player1Up.setLocation(-100, 0);
-		add(Data.player1Dead);
-		//dead bird at bottom of screen
+
 
 		// //Player 2
 		Data.player2Flat.setLocation(-100, 0);
 		Data.player2Down.setLocation(-100, 0);
 		Data.player2Up.setLocation(-100, 0);
-		//dead bird at bottom of screen
-		add(Data.player2Dead);
-		Data.player2Dead.setLocation(36, 370);
 
 		// Foreground
 		add(Data.ground);

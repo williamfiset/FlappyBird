@@ -142,12 +142,12 @@ public abstract class Data{
 			Data.player1Flat.setLocation(-100, 0);
 			Data.player1Down.setLocation(-100, 0);
 			Data.player1Up.setLocation(-100, 0);
-			Data.player1Dead.setLocation(70, 371);
+			Data.player2Dead.setLocation(FlappyBird.BIRD1_X_START, 371);
 			//Player 2
 			Data.player2Flat.setLocation(-100, 0);
 			Data.player2Down.setLocation(-100, 0);
 			Data.player2Up.setLocation(-100, 0);
-			Data.player2Dead.setLocation(70, 371);
+			Data.player2Dead.setLocation(FlappyBird.BIRD2_X_START, 371);
 			
 			// Misc.
 			Data.getReady.setLocation(45, 170);
