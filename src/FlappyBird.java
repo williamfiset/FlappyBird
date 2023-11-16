@@ -83,7 +83,7 @@ public class FlappyBird extends GraphicsProgram {
 		}
 		add(Data.ground);
 		add(Data.getReady);
-		if (score >= scoreInterval * 100){
+		if (score > (scoreInterval * 100)){
 			add(Data.birdLogo);
 		}
 		add(Data.instructions);
@@ -425,15 +425,15 @@ public class FlappyBird extends GraphicsProgram {
 		// Award medal if applicable
 
 		// Determines the interval for each medal
-		if (score >= scoreInterval * 100)
+		if (score > scoreInterval * 100)
 			add(Data.birdMedal);
-		else if (score >= scoreInterval * 40)
+		else if (score > scoreInterval * 40)
 			add(Data.platinumMedal);
-		else if (score >= scoreInterval * 30)
+		else if (score > scoreInterval * 30)
 			add(Data.goldMedal);
-		else if (score >= scoreInterval * 20)
+		else if (score > scoreInterval * 20)
 			add(Data.silverMedal);
-		else if (score >= scoreInterval * 10)
+		else if (score > scoreInterval * 10)
 			add(Data.bronzeMedal);
 
 		// Retrieve high score from file
@@ -481,21 +481,21 @@ public class FlappyBird extends GraphicsProgram {
 		// Game setup
 		resetPipes();
 		add(Data.getReady);
-		if (score >= scoreInterval * 100){
+		if (score > scoreInterval * 100){
 			add(Data.birdLogo);
 		}
 		add(Data.instructions);
 
 		// Remove elements from screen
-		if (score >= scoreInterval * 100)
+		if (score > scoreInterval * 100)
 			remove(Data.birdMedal);
-		else if (score >= scoreInterval * 40)
+		else if (score > scoreInterval * 40)
 			remove(Data.platinumMedal);
-		else if (score >= scoreInterval * 30)
+		else if (score > scoreInterval * 30)
 			remove(Data.goldMedal);
-		else if (score >= scoreInterval * 20)
+		else if (score > scoreInterval * 20)
 			remove(Data.silverMedal);
-		else if (score >= scoreInterval * 10)
+		else if (score > scoreInterval * 10)
 			remove(Data.bronzeMedal);
 		remove(Data.scoreboard);
 		remove(Data.new_);
