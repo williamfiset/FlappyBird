@@ -134,9 +134,11 @@ public class Bird extends FlappyBird{
 			//Day
 			window.add(Data.player1Flat);
 			window.remove(Data.player1Up);
+			window.remove(Data.player2Down);
 			//Night
 			window.add(Data.player2Flat);
 			window.remove(Data.player2Up);
+			window.remove(Data.player2Down);
 		}
 		else if(index == 1){
 			//Day
@@ -159,9 +161,11 @@ public class Bird extends FlappyBird{
 			//Day
 			window.add(Data.player1Up);
 			window.remove(Data.player1Flat);
+			window.remove(Data.player1Down);
 			//Night
 			window.add(Data.player2Up);
 			window.remove(Data.player2Flat);
+			window.remove(Data.player2Down);
 		}
 		//remove all bird images
 	}else {
