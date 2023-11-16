@@ -129,7 +129,7 @@ public class Bird extends FlappyBird{
 
 	/** Animates the Flappy bird **/
 	protected void animateBird(int index, GraphicsProgram window){
-		
+		if (FlappyBird.currentMode != 3){
 		if(index == 0){
 			//Day
 			window.add(Data.player1Flat);
@@ -163,8 +163,16 @@ public class Bird extends FlappyBird{
 			window.add(Data.player2Up);
 			window.remove(Data.player2Flat);
 		}
-		
+		//remove all bird images
+	}else {
+		remove(Data.player1Up);
+		remove(Data.player1Down);
+		remove(Data.player1Flat);
+		remove(Data.player2Up);
+		remove(Data.player2Down);
+		remove(Data.player2Flat);
 	}
+}
 
 	public void setY(int y){ this.y = y; }
 	public void setX(int x){ this.x = x; }

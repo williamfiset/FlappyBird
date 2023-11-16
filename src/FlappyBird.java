@@ -118,12 +118,18 @@ public class FlappyBird extends GraphicsProgram {
 			if (FlappyBird.currentMode == 1 || FlappyBird.currentMode == 2) {
 
 				player1.fly();
-				//player2.fly();
+				player2.fly();
 
-				// Checks if you hit the ground
+				// Checks if player1 you hit the ground
 				if (player1.getY() > FlappyBird.GROUND_LEVEL - Data.player1Flat.getHeight()) {
 					Music.playSound("Music/falling.wav");
 					player1.downwardSpeed = 0;
+					endRound();
+				}
+				// Checks if player 2you hit the ground
+				if (player2.getY() > FlappyBird.GROUND_LEVEL - Data.player2Flat.getHeight()) {
+					Music.playSound("Music/falling.wav");
+					player2.downwardSpeed = 0;
 					endRound();
 				}
 			}
@@ -408,10 +414,22 @@ public class FlappyBird extends GraphicsProgram {
 		//remove the birds
 
 		// Player 1
-		add(Data.player1Dead);
-		// //Player 2
-		add(Data.player2Dead);
+		//remove all player 1 birds
 
+
+		Data.player1Flat.setLocation(-100, 0);
+		Data.player1Down.setLocation(-100, 0);
+		Data.player1Up.setLocation(-100, 0);
+		add(Data.player1Dead);
+		//dead bird at bottom of screen
+
+		// //Player 2
+		Data.player2Flat.setLocation(-100, 0);
+		Data.player2Down.setLocation(-100, 0);
+		Data.player2Up.setLocation(-100, 0);
+		//dead bird at bottom of screen
+		add(Data.player2Dead);
+		Data.player2Dead.setLocation(36, 370);
 
 		// Foreground
 		add(Data.ground);
@@ -473,7 +491,10 @@ public class FlappyBird extends GraphicsProgram {
 
 		// Adjust Variables
 		player1.setY(240);
+		player2.setY(240);
+
 		player1.downwardSpeed = 0;
+		player2.downwardSpeed = 0;
 
 		// Reset mode to "Get Ready"
 		FlappyBird.currentMode = 0;
