@@ -12,6 +12,7 @@ import acm.program.*;
 public class Bird extends FlappyBird{
 
 	GRectangle birdRect;
+	GImage currentImage;
 
 	protected int downwardSpeed = 0, x, y;
 	private int animationCounter = 0;
@@ -23,7 +24,6 @@ public class Bird extends FlappyBird{
 		this.y = startingY;
 		// Creates a thin invisible rectangle on top of the bird as it flys for collision detection
 		birdRect = new GRectangle(x, y, 25, 30);
-
 	}
 
 	/** Checks for collision between the pipes and the bird **/
@@ -120,10 +120,12 @@ public class Bird extends FlappyBird{
 	public void capHeight(){
 		
 		// cap at top of screen
-		if(getY() > 20)
-			downwardSpeed = 10;
+		if(this.getY() > 20)
+			this.downwardSpeed = 10;
 
 	}
+
+	
 
 	/** Animates the Flappy bird **/
 	protected void animateBird(int index, GraphicsProgram window){

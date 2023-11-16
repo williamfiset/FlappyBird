@@ -116,7 +116,7 @@ public class FlappyBird extends GraphicsProgram {
 			if (FlappyBird.currentMode == 1 || FlappyBird.currentMode == 2) {
 
 				player1.fly();
-				player2.fly();
+				//player2.fly();
 
 				// Checks if you hit the ground
 				if (player1.getY() > FlappyBird.GROUND_LEVEL - Data.player1Flat.getHeight()) {
@@ -168,7 +168,7 @@ public class FlappyBird extends GraphicsProgram {
 		char character = key.getKeyChar();
 
 		if (character == ' ' || character == 'w')
-			respondToUserInput();
+			respondToUserInput(1);
 
 	}
 
@@ -185,13 +185,12 @@ public class FlappyBird extends GraphicsProgram {
 				replayGame();
 			return;
 		}
-
-		respondToUserInput();
+		respondToUserInput(2);
 
 	}
 
 	/** Responds to user input by invoking flapWing() or changing the game state **/
-	public void respondToUserInput() {
+	public void respondToUserInput(int player) {
 		// If the current mode is "Get Ready", it begins the game
 		if (FlappyBird.currentMode == 0) {
 			FlappyBird.currentMode = 1;
@@ -203,8 +202,10 @@ public class FlappyBird extends GraphicsProgram {
 		// If the current mode is "Playing", the flapping sound effect is played and it
 		// ensures that the bird isn't above the top of the screen
 		else if (FlappyBird.currentMode == 1) {
+			if (player == 1) 
 			player1.capHeight();
-
+			else if (player == 2)
+			player2.capHeight();
 			Music.playSound("Music/flap.wav");
 		}
 
@@ -399,21 +400,13 @@ public class FlappyBird extends GraphicsProgram {
 		//randomize night 
 
 		FlappyBird.currentMode = 3;
+		//remove the birds
 
 		// Player 1
-		remove(Data.player1Up);
-		remove(Data.player1Down);
-		remove(Data.player1Flat);
 		add(Data.player1Dead);
-		Data.player1Dead.setSize(27,36);
-
-
-		//Player 2
-		remove(Data.player2Up);
-		remove(Data.player2Down);
-		remove(Data.player2Flat);
+		// //Player 2
 		add(Data.player2Dead);
-		Data.player2Dead.setSize(27,36);
+
 
 		// Foreground
 		add(Data.ground);
@@ -422,7 +415,8 @@ public class FlappyBird extends GraphicsProgram {
 		add(Data.gameOver);
 		add(Data.scoreboard);
 		add(Data.replayButton);
-
+		
+	
 		// Award medal if applicable
 
 		// Determines the interval for each medal
@@ -465,7 +459,6 @@ public class FlappyBird extends GraphicsProgram {
 
 	/** Resets game graphics **/
 	public void replayGame() {
-	
 		// Remove elements from screen
 		remove(Data.replayButton);
 		remove(Data.gameOver);
