@@ -14,31 +14,31 @@ import java.awt.event.*;
 
 public class FlappyBird extends GraphicsProgram {
 
-	final static int SCREEN_WIDTH = 288, SCREEN_HEIGHT = 512, GROUND_LEVEL = 400, PIPE_WIDTH = 52, 
-	BIRD1_X_START = 68, BIRD2_X_START = 36;
+	final static int SCREEN_WIDTH = 288, SCREEN_HEIGHT = 512, GROUND_LEVEL = 400, PIPE_WIDTH = 52,
+			BIRD1_X_START = 68, BIRD2_X_START = 68;
 
-	Bird player1, player2;
-	FileHandler highScoreFile;
+	Bird player1, player2; // The bird that the user controls
+	FileHandler highScoreFile; // Used to save the high score to a file
 
 	static int currentMode = 0; // 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
-	static int score = 0;
-	boolean isNight = true;
-	int scoreChange = 0;
+	static int[] score = { 0, 0, 0 }; // player 1, total, player 2
+	boolean isNight = true; // true = night, false = day
+	int scoreChange = 0; //needed to determin if night should change
 
 	// award for the space between pipes
 	// center of the space between pipes
-	int[] pipeSpaceCenter1 = {0,0,0,0};
-	int[] pipeSpaceCenter2 = {0,0,0,0};
-	int[] distance1 = {0,0,0,0};
-	int[] distance2 = {0,0,0,0};
-	int[] topOfMiddlePipe = {0,0,0,0}, bottomOfMiddlePipe = {0,0,0,0},
-			bottomOfTopPipe = {0,0,0,0}, topOfBottomPipe = {0,0,0,0};
+	int[] pipeSpaceCenter1 = { 0, 0, 0, 0 }; 
+	int[] pipeSpaceCenter2 = { 0, 0, 0, 0 }; 
+	int[] distance1 = { 0, 0, 0, 0 };
+	int[] distance2 = { 0, 0, 0, 0 };
+	int[] topOfMiddlePipe = { 0, 0, 0, 0 }, bottomOfMiddlePipe = { 0, 0, 0, 0 },
+			bottomOfTopPipe = { 0, 0, 0, 0 }, topOfBottomPipe = { 0, 0, 0, 0 };
 
 	// space between pipes
 	int pipeSpace = 0;
 	int pipeCounter = 0;
 	double totalPipeScore = 0;
-	
+
 	// min and max for the space between pipes
 	int min = 150, max = 249;
 	double scoreInterval = 0;
@@ -62,14 +62,13 @@ public class FlappyBird extends GraphicsProgram {
 		// Sets
 		resetPipes();
 
-		//randomize night 
+		// randomize night
 		isNight = (Math.random() < 0.5);
 		changeNight();
 
 		// Adds starting images to screen
 		add(Data.backgroundNight);
 		add(Data.backgroundDay);
-
 
 		for (int i = 0; i < 4; i++) {
 			// Adds pipes to screen
@@ -83,7 +82,8 @@ public class FlappyBird extends GraphicsProgram {
 		}
 		add(Data.ground);
 		add(Data.getReady);
-		if (score > (scoreInterval * 100)){
+		score[1] = score[0] + score[2];
+		if (score[1] > (scoreInterval * 100)) { // fix this for 2 players
 			add(Data.birdLogo);
 		}
 		add(Data.instructions);
@@ -92,10 +92,13 @@ public class FlappyBird extends GraphicsProgram {
 
 		// Initializes the images for the running total digits so that it's not null
 		// (Places it out of view)
-		for (int i = 0; i < 10; i++) {
-			Data.scoreDigits[i] = new GImage(Data.bigNums[0].getImage());
-			Data.scoreDigits[i].setLocation(-100, 0);
-			add(Data.scoreDigits[i]);
+		for (int n = 0; n < 10; n++) {
+			//loop thru 3 scores
+			for (int i = 0; i < 3; i++) {
+				Data.scoreDigits[i][n] = new GImage(Data.bigNums[0].getImage());
+				Data.scoreDigits[i][n].setLocation(-100, 0);
+				add(Data.scoreDigits[i][n]);
+			}
 		}
 
 		// Draw the initial "0"
@@ -127,7 +130,6 @@ public class FlappyBird extends GraphicsProgram {
 					add(Data.player1Dead);
 					Data.player1Dead.setLocation(70, 370);
 					endRound();
-					player1.animateBird(3, this);
 				}
 				// Checks if player 2you hit the ground
 				if (player2.getY() > FlappyBird.GROUND_LEVEL - Data.player2Flat.getHeight()) {
@@ -135,7 +137,6 @@ public class FlappyBird extends GraphicsProgram {
 					player2.downwardSpeed = 0;
 					add(Data.player2Dead);
 					endRound();
-					player2.animateBird(3, this);
 				}
 			}
 
@@ -143,6 +144,13 @@ public class FlappyBird extends GraphicsProgram {
 			if (FlappyBird.currentMode == 1) {
 
 				movePipes();
+
+				// Checks if you hit a pipe
+				if (player1.pipeCollision()) {
+					Music.playSound("Music/falling.wav");
+					player1.downwardSpeed = Math.min(0, player1.downwardSpeed);
+					currentMode = 2;
+				}
 
 				// Checks if you hit a pipe
 				if (player1.pipeCollision()) {
@@ -162,12 +170,12 @@ public class FlappyBird extends GraphicsProgram {
 			}
 
 			// Draw the bird with his flappy little wings
-				if (FlappyBird.currentMode < 3)
-					player1.draw(this,1);
-					player2.draw(this, 2);
-				// This controls the speed of the game
-					pause(40);
-				
+			if (FlappyBird.currentMode < 3)
+				player1.draw(this, 1);
+			player2.draw(this, 2);
+			// This controls the speed of the game
+			pause(40);
+
 		}
 	}
 
@@ -215,10 +223,10 @@ public class FlappyBird extends GraphicsProgram {
 		// If the current mode is "Playing", the flapping sound effect is played and it
 		// ensures that the bird isn't above the top of the screen
 		else if (FlappyBird.currentMode == 1) {
-			if (player == 1) 
-			player1.capHeight();
+			if (player == 1)
+				player1.capHeight();
 			else if (player == 2)
-			player2.capHeight();
+				player2.capHeight();
 			Music.playSound("Music/flap.wav");
 		}
 
@@ -226,7 +234,6 @@ public class FlappyBird extends GraphicsProgram {
 
 	/** Moves the pipes to the left, warping to the right side if needed **/
 	public void movePipes() {
-
 
 		for (int i = 0; i < 4; i++) {
 
@@ -241,42 +248,43 @@ public class FlappyBird extends GraphicsProgram {
 
 			// Draw the score for the next pipe
 			drawPipeScore(i, (int) Data.pipeBottomDay[i].getX() + (PIPE_WIDTH / 2) - 6);
-			
+
 			// Move pipe digits
-				Data.pipeDigits1[i][0].move(-4, 0);
-				Data.pipeDigits1[i][1].move(-4, 0);
-				Data.pipeDigits2[i][0].move(-4, 0);
-				Data.pipeDigits2[i][1].move(-4, 0);
-			
+			Data.pipeDigits1[i][0].move(-4, 0);
+			Data.pipeDigits1[i][1].move(-4, 0);
+			Data.pipeDigits2[i][0].move(-4, 0);
+			Data.pipeDigits2[i][1].move(-4, 0);
+
 			if (Data.pipeBottomDay[i].getX() == BIRD1_X_START + 2) {
-				
+
 				// award score for each pipe that you pass
-				
-				//if the bird is between the top and middle pipes
+
+				// if the bird is between the top and middle pipes
 				if (player1.getY() < topOfMiddlePipe[i] + 55.5) {
-					score += 100 - distance1[i];
-				}else {
-					score += 100 - distance2[i];
-				}	
+					score[0] += 100 - distance1[i];
+				} else {
+					score[0] += 100 - distance2[i];
+				}
 				pipeCounter += 2;
 				totalPipeScore += distance1[i] + distance2[i];
 				scoreInterval = totalPipeScore / pipeCounter;
 
-			// if (Data.pipeBottomDay[i].getX() == BIRD2_X_START + 2) {
-				
-			// 	// award score for each pipe that you pass
-				
-			// 	//if the bird is between the top and middle pipes
-			// 	if (player2.getY() < topOfMiddlePipe[i] + 55.5) {
-			// 		score2 += 100 - distance1[i];
-			// 	}else {
-			// 		score2 += 100 - distance2[i];
-			// 	}	
-			
+				// if (Data.pipeBottomDay[i].getX() == BIRD2_X_START + 2) {
+
+				// award score for each pipe that you pass
+
+				// if the bird is between the top and middle pipes
+				if (player2.getY() < topOfMiddlePipe[i] + 55.5) {
+					score[2] += 100 - distance1[i];
+				} else {
+					score[2] += 100 - distance2[i];
+				}
+
+				score[1] = score[0] + score[2]; //total score
 				drawScore();
 				// calls isNight every 250 points
-				if ((int) score / 250 > scoreChange) {
-					scoreChange = (int)score / 250;
+				if ((int) score[1] / 500 > scoreChange) {
+					scoreChange = (int) ( score[1]) / 500;
 					changeNight();
 				}
 				Music.playSound("Music/coinSound.wav");
@@ -284,22 +292,22 @@ public class FlappyBird extends GraphicsProgram {
 
 			// Re-spawns the pipe if they have already slid across the screen
 			if (Data.pipeBottomDay[i].getX() < -(SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2)) {
-				
+
 				Data.pipeTopDay[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
 				Data.pipeBottomDay[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
-				(GROUND_LEVEL / 2));
-				//create middle pipe between top and bottom
+						(GROUND_LEVEL / 2));
+				// create middle pipe between top and bottom
 				Data.pipeMiddleDay[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
-				(GROUND_LEVEL / 2) - 118);
-				
+						(GROUND_LEVEL / 2) - 118);
+
 				Data.pipeTopNight[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
 				Data.pipeBottomNight[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
-				(GROUND_LEVEL / 2));
-				//create middle pipe between top and bottom
+						(GROUND_LEVEL / 2));
+				// create middle pipe between top and bottom
 				Data.pipeMiddleNight[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
-				(GROUND_LEVEL / 2) - 118);
+						(GROUND_LEVEL / 2) - 118);
 
-			// Move pipe digits
+				// Move pipe digits
 				randomizePipes(i);
 				findPipeCenters(i);
 			}
@@ -308,7 +316,7 @@ public class FlappyBird extends GraphicsProgram {
 
 	}
 
-	//change night function
+	// change night function
 	public void changeNight() {
 		isNight = !isNight;
 		// Change background
@@ -318,11 +326,11 @@ public class FlappyBird extends GraphicsProgram {
 		for (int i = 0; i < 4; i++) {
 
 			// Change pipes
-			//Player 1
+			// Player 1
 			Data.pipeTopDay[i].setVisible(isNight);
 			Data.pipeBottomDay[i].setVisible(isNight);
 			Data.pipeMiddleDay[i].setVisible(isNight);
-			//Player 2
+			// Player 2
 			Data.pipeTopNight[i].setVisible(!isNight);
 			Data.pipeBottomNight[i].setVisible(!isNight);
 			Data.pipeMiddleNight[i].setVisible(!isNight);
@@ -340,14 +348,14 @@ public class FlappyBird extends GraphicsProgram {
 			Data.pipeTopDay[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
 			Data.pipeBottomDay[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2));
-			//create middle pipe between top and bottom
+			// create middle pipe between top and bottom
 			Data.pipeMiddleDay[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2) - 118);
 
 			Data.pipeTopNight[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
 			Data.pipeBottomNight[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2));
-			//create middle pipe between top and bottom
+			// create middle pipe between top and bottom
 			Data.pipeMiddleNight[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2) - 118);
 
@@ -356,30 +364,30 @@ public class FlappyBird extends GraphicsProgram {
 		}
 	}
 
-	//find the center spaces between the pipes:
-		public void findPipeCenters(int i) {
+	// find the center spaces between the pipes:
+	public void findPipeCenters(int i) {
 
-			//y location OF bottom of top pipe or top of screen which ever is lower
-			bottomOfTopPipe[i] = (int) Math.max(Data.pipeTopDay[i].getY() + 320, 0);
-		
-			//y location OF top of bottom pipe or the ground whichever is higher
-			topOfBottomPipe[i] = (int) Math.min(Data.pipeBottomDay[i].getY(), GROUND_LEVEL);
+		// y location OF bottom of top pipe or top of screen which ever is lower
+		bottomOfTopPipe[i] = (int) Math.max(Data.pipeTopDay[i].getY() + 320, 0);
 
-			//y of top of middle pipe
-			topOfMiddlePipe[i] = (int) Data.pipeMiddleDay[i].getY();
-			//y location of bottom of middle pipe
-			bottomOfMiddlePipe[i] = (int) Data.pipeMiddleDay[i].getY() + 111;
-			//center of space between bottomOfTopPipe and topOfMiddlePipe
+		// y location OF top of bottom pipe or the ground whichever is higher
+		topOfBottomPipe[i] = (int) Math.min(Data.pipeBottomDay[i].getY(), GROUND_LEVEL);
 
-			pipeSpaceCenter1[i] = (bottomOfTopPipe[i] + topOfMiddlePipe[i]) / 2;
-			//center of space between bottomOfMiddlePipe and topOfBottomPipe
-			pipeSpaceCenter2[i] = (bottomOfMiddlePipe[i] + topOfBottomPipe[i]) / 2;
-			//distance between bottomOfTopPipe and topOfMiddlePipe
-			distance1[i] = (topOfMiddlePipe[i] - bottomOfTopPipe[i] ) / 2;
-			//distance between bottomOfMiddlePipe and topOfBottomPipe
-			distance2[i] = (topOfBottomPipe[i] - bottomOfMiddlePipe[i]) / 2;
-			
-		}
+		// y of top of middle pipe
+		topOfMiddlePipe[i] = (int) Data.pipeMiddleDay[i].getY();
+		// y location of bottom of middle pipe
+		bottomOfMiddlePipe[i] = (int) Data.pipeMiddleDay[i].getY() + 111;
+		// center of space between bottomOfTopPipe and topOfMiddlePipe
+
+		pipeSpaceCenter1[i] = (bottomOfTopPipe[i] + topOfMiddlePipe[i]) / 2;
+		// center of space between bottomOfMiddlePipe and topOfBottomPipe
+		pipeSpaceCenter2[i] = (bottomOfMiddlePipe[i] + topOfBottomPipe[i]) / 2;
+		// distance between bottomOfTopPipe and topOfMiddlePipe
+		distance1[i] = (topOfMiddlePipe[i] - bottomOfTopPipe[i]) / 2;
+		// distance between bottomOfMiddlePipe and topOfBottomPipe
+		distance2[i] = (topOfBottomPipe[i] - bottomOfMiddlePipe[i]) / 2;
+
+	}
 
 	/** Randomizes the given set of pipes **/
 	public void randomizePipes(int i) {
@@ -391,14 +399,14 @@ public class FlappyBird extends GraphicsProgram {
 		// moves the pipes to the new location
 		Data.pipeTopDay[i].move(0, randomAltitude - pipeSpace);
 		Data.pipeBottomDay[i].move(0, randomAltitude + pipeSpace);
-		//create middle pipe centered exactly in the middle of the top and bottom
+		// create middle pipe centered exactly in the middle of the top and bottom
 		Data.pipeMiddleDay[i].move(0, randomAltitude + 56);
 
 		Data.pipeTopNight[i].move(0, randomAltitude - pipeSpace);
 		Data.pipeBottomNight[i].move(0, randomAltitude + pipeSpace);
 
-		//create middle pipe centered exactly in the middle of the top and bottom
-		Data.pipeMiddleNight[i].move(0, randomAltitude+ 56);
+		// create middle pipe centered exactly in the middle of the top and bottom
+		Data.pipeMiddleNight[i].move(0, randomAltitude + 56);
 	}
 
 	/** Displays the graphics for the end of a round **/
@@ -406,26 +414,24 @@ public class FlappyBird extends GraphicsProgram {
 
 		// Remove elements from screen
 		for (int i = 0; i < 4; i++) {
-			for (int n = 0; n < 10; n++){
+			for (int n = 0; n < 10; n++) {
 				remove(Data.pipeDigits1[i][n]);
 				remove(Data.pipeDigits2[i][n]);
 			}
 		}
-	
-		scoreChange = 0;
-		//randomize night 
+
+
+		// randomize night
 
 		FlappyBird.currentMode = 3;
-		//remove the birds
+		player1.animationCounter = 0;
+		player2.animationCounter = 0;
+		// remove the birds
 
 		// Player 1
-		//remove all player 1 birds
-
-
 		Data.player1Flat.setLocation(-100, 0);
 		Data.player1Down.setLocation(-100, 0);
 		Data.player1Up.setLocation(-100, 0);
-
 
 		// //Player 2
 		Data.player2Flat.setLocation(-100, 0);
@@ -439,20 +445,20 @@ public class FlappyBird extends GraphicsProgram {
 		add(Data.gameOver);
 		add(Data.scoreboard);
 		add(Data.replayButton);
-		
-	
+
 		// Award medal if applicable
 
 		// Determines the interval for each medal
-		if (score > scoreInterval * 100)
+		score[1] = (int) (score[0] + score[2]); // total score
+		if (score[1] > scoreInterval * 100)
 			add(Data.birdMedal);
-		else if (score > scoreInterval * 40)
+		else if (score[1] > scoreInterval * 40)
 			add(Data.platinumMedal);
-		else if (score > scoreInterval * 30)
+		else if (score[1] > scoreInterval * 30)
 			add(Data.goldMedal);
-		else if (score > scoreInterval * 20)
+		else if (score[1] > scoreInterval * 20)
 			add(Data.silverMedal);
-		else if (score > scoreInterval * 10)
+		else if (score[1] > scoreInterval * 10)
 			add(Data.bronzeMedal);
 
 		// Retrieve high score from file
@@ -461,15 +467,16 @@ public class FlappyBird extends GraphicsProgram {
 
 		// Sets the users score to zero for trying to cheat
 		if (highScoreFile.fileHasBeenManipulated()) {
-			drawBoardScore(1, score);
+			drawBoardScore(1, score[2]);
 			Data.new_.setLocation(-100, 0);
 		}
 
 		// Update HighScore
-		else if (score > highScore) {
-			highScoreFile.updateHighScore(Integer.toString(score));
-			drawBoardScore(1, score);
-			Data.new_.setLocation(164, 256);;
+		else if (score[1] > highScore) {
+			highScoreFile.updateHighScore(Integer.toString(score[2]));
+			drawBoardScore(1, score[1]);
+			Data.new_.setLocation(164, 256);
+			;
 			// Draw old high score
 		} else {
 			drawBoardScore(1, highScore);
@@ -477,7 +484,7 @@ public class FlappyBird extends GraphicsProgram {
 		}
 
 		add(Data.new_);
-		drawBoardScore(0, score);
+		drawBoardScore(0, score[1]);
 
 	}
 
@@ -503,27 +510,29 @@ public class FlappyBird extends GraphicsProgram {
 		// Game setup
 		resetPipes();
 		add(Data.getReady);
-		if (score > scoreInterval * 100){
+		score[1] = (int) (score[0] + score[2]); // total score
+		if (score[1] > scoreInterval * 100) {
 			add(Data.birdLogo);
 		}
 		add(Data.instructions);
 
 		// Remove elements from screen
-		if (score > scoreInterval * 100)
+		if (score[1] > scoreInterval * 100)
 			remove(Data.birdMedal);
-		else if (score > scoreInterval * 40)
+		else if (score[1] > scoreInterval * 40)
 			remove(Data.platinumMedal);
-		else if (score > scoreInterval * 30)
+		else if (score[1] > scoreInterval * 30)
 			remove(Data.goldMedal);
-		else if (score > scoreInterval * 20)
+		else if (score[1] > scoreInterval * 20)
 			remove(Data.silverMedal);
-		else if (score > scoreInterval * 10)
+		else if (score[1] > scoreInterval * 10)
 			remove(Data.bronzeMedal);
 		remove(Data.scoreboard);
 		remove(Data.new_);
 
 		// Reset score
-		score = 0;
+		score[0] = 0; //player 1
+		score[2] = 0; // player 2
 		initializeDigits(false);
 
 		// Draw initial '0'
@@ -580,7 +589,7 @@ public class FlappyBird extends GraphicsProgram {
 			// Find the proper location
 			if (drawing || n == 0)
 				Data.scoreBoardDigits[n + mode * 10].setLocation(startPoint - n, 232 + mode * 42);
-				else	
+			else
 				Data.scoreBoardDigits[n + mode * 10].setLocation(-100, 0);
 
 			// Add to screen
@@ -591,20 +600,22 @@ public class FlappyBird extends GraphicsProgram {
 		}
 
 	}
-	// function that draws the score for the next pipe spaces on the screen distance for
+
+	// function that draws the score for the next pipe spaces on the screen distance
+	// for
 	// the top and distance two for the bottom - it centers the dirrectly
-	//in the middle of the space between the pipes (two diffrent numbers)
-	//one for the two opening and one for teh bttom opening
+	// in the middle of the space between the pipes (two diffrent numbers)
+	// one for the two opening and one for teh bttom opening
 	protected void drawPipeScore(int i, int x) {
-		GImage[][][] pipeDigitsArray = {Data.pipeDigits1, Data.pipeDigits2};
-		int[] pipeSpaceCenterArray = {pipeSpaceCenter1[i], pipeSpaceCenter2[i]};
-		int[] distances = {100-distance1[i], 100-distance2[i]};
-	
+		GImage[][][] pipeDigitsArray = { Data.pipeDigits1, Data.pipeDigits2 };
+		int[] pipeSpaceCenterArray = { pipeSpaceCenter1[i], pipeSpaceCenter2[i] };
+		int[] distances = { 100 - distance1[i], 100 - distance2[i] };
+
 		for (int j = 0; j < 2; j++) {
 			// Initialize variables
 			int tempScore = distances[j];
 			int widthScore = -1, digitCounter = 0;
-	
+
 			// Remove the previous score
 			for (int n = 0; n < 2; n++) {
 				remove(pipeDigitsArray[j][i][n]);
@@ -617,7 +628,7 @@ public class FlappyBird extends GraphicsProgram {
 				tempScore /= 10;
 				digitCounter++;
 			} while (tempScore > 0);
-	
+
 			// Draw the score on the scoreboard
 			int startPoint = x - (widthScore / 2);
 			// Draw the number on screen
@@ -630,36 +641,45 @@ public class FlappyBird extends GraphicsProgram {
 		}
 	}
 
-
 	/** Draws your current score on the screen **/
 	protected void drawScore() {
+		// loop thru two scores
+		for (int i = 0; i < 3; i++) {
+			// Initialize variables
+			int widthScore = -1, digitCounter = 0;
 
-		// Initialize variables
-		int tempScore = score, widthScore = -1, digitCounter = 0;
+			// Remove the previous score
+				for (int n = 0; n < 10; n++) {
+					remove(Data.scoreDigits[i][n]);
+				}
+			// Take the score one digit at a time (from right to left), and associate the
+			// corresponding image of a number to that location in the array
+			do {
+				if (i == 1) {
+					Data.scoreDigits[i][digitCounter] = new GImage(Data.bigNums[score[i] % 10].getImage());
+				} else {
+					Data.scoreDigits[i][digitCounter] = new GImage(Data.medNums[score[i] % 10].getImage());
+				}
+				widthScore += Data.bigNums[score[i] % 10].getWidth() + 1;
+				score[i] /= 10;
+				digitCounter++;
+			} while (score[i] > 0);
 
-		// Remove the previous score
-		for (int n = 0; n < 10; n++) {
-			remove(Data.scoreDigits[n]);
-		}
-		// Take the score one digit at a time (from right to left), and associate the
-		// corresponding image of a number to that location in the array
-		do {
-			Data.scoreDigits[digitCounter] = new GImage(Data.bigNums[tempScore % 10].getImage());
-			widthScore += Data.bigNums[tempScore % 10].getWidth() + 1;
-			tempScore /= 10;
-			digitCounter++;
-		} while (tempScore > 0);
+			// Draw the score on the scoreboard
+			int startPoint = (SCREEN_WIDTH / 2) - (widthScore / 2);
+			// Draw the number on screen
+			for (int n = 0; n < digitCounter; n++) {
+				int index = digitCounter - n - 1;
+				if (i == 1) {
+					Data.scoreDigits[i][index].setLocation(startPoint - (i * 75) + 65, 430);
+				} else {
+					Data.scoreDigits[i][index].setLocation(startPoint - (i * 75) + 65, 440);
+				}
+				add(Data.scoreDigits[i][index]);
+				startPoint += Data.scoreDigits[i][index].getWidth() + 1;
+			}
 
-		// Draw the score on the scoreboard
-		int startPoint = (SCREEN_WIDTH / 2) - (widthScore / 2);
-		// Draw the number on screen
-		for (int n = 0; n < digitCounter; n++) {
-			int index = digitCounter - n - 1;
-			Data.scoreDigits[index].setLocation(startPoint, 430);
-			add(Data.scoreDigits[index]);
-			startPoint += Data.scoreDigits[index].getWidth() + 1;
 		}
 
 	}
-
 }
