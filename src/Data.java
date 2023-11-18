@@ -19,7 +19,9 @@ public abstract class Data {
 	public static GImage ground, birdLogo, birdMedal,
 			player1Flat, player1Up, player1Down, player1Dead,
 			player2Flat, player2Up, player2Down, player2Dead,
-			backgroundDay, backgroundNight,
+			backgroundDay, backgroundNight, 
+			backgroundDay2, backgroundNight2,
+			backgroundDay3, backgroundNight3,
 			getReady, gameOver, instructions, scoreboard, replayButton,
 			bronzeMedal, silverMedal, goldMedal, platinumMedal, new_;
 
@@ -53,7 +55,11 @@ public abstract class Data {
 		// Background
 		Data.backgroundDay = makeImage(fullImage, 0, 0, 288, 512);
 		Data.backgroundNight = makeImage(fullImage, 292, 0, 580, 512);
-
+		Data.backgroundDay2 = makeImage(fullImage, 0, 0, 288, 512);
+		Data.backgroundNight2 = makeImage(fullImage, 292, 0, 580, 512);
+		Data.backgroundDay3 = makeImage(fullImage, 0, 0, 288, 512);
+		Data.backgroundNight3 = makeImage(fullImage, 292, 0, 580, 512);
+		
 		// Pipes
 		for (int i = 0; i < 4; i++) {
 			// Green pipes (for day mode)
@@ -65,7 +71,7 @@ public abstract class Data {
 			Data.pipeTopDay[i] = makeImage(fullImage, 0, 646, 52, 965);
 			Data.pipeBottomDay[i] = makeImage(fullImage, 56, 644, 108, 963);
 			Data.pipeMiddleDay[i] = makeImage(fullImage, 358, 869, 410, 980);
-
+			
 			// Score Digits
 			for (int n = 0; n < 10; n++) {
 				Data.scoreDigits[i][n] = makeImage(fullImage, 274, 612, 288, 632);

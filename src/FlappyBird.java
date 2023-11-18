@@ -67,8 +67,16 @@ public class FlappyBird extends GraphicsProgram {
 		changeNight();
 
 		// Adds starting images to screen
+		add(Data.backgroundNight3);
+		add(Data.backgroundDay3);
+		Data.backgroundDay3.setLocation(0,0);
+		Data.backgroundNight3.setLocation(0,0);
+
 		add(Data.backgroundNight);
 		add(Data.backgroundDay);
+
+		add(Data.backgroundNight2);
+		add(Data.backgroundDay2);
 
 		for (int i = 0; i < 4; i++) {
 			// Adds pipes to screen
@@ -80,7 +88,6 @@ public class FlappyBird extends GraphicsProgram {
 			add(Data.pipeBottomNight[i]);
 			add(Data.pipeMiddleNight[i]);
 		}
-		add(Data.ground);
 		add(Data.getReady);
 		score[1] = score[0] + score[2];
 		if (score[1] > (scoreInterval * 100)) { // fix this for 2 players
@@ -113,7 +120,7 @@ public class FlappyBird extends GraphicsProgram {
 	/** run Contains the Game Loop **/
 	@Override
 	public void run() {
-		int groundOffset = 0;
+		int backgroundOffset = 0;
 		while (true) {
 
 			// currentMode: 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
@@ -124,19 +131,14 @@ public class FlappyBird extends GraphicsProgram {
 				player2.fly();
 
 				// Checks if player1 you hit the ground
-				if (player1.getY() > FlappyBird.GROUND_LEVEL - Data.player1Flat.getHeight()) {
-					Music.playSound("Music/falling.wav");
+				if (player1.getY() > SCREEN_HEIGHT - 30) {
+					player1.setY(15);
 					player1.downwardSpeed = 0;
-					add(Data.player1Dead);
-					Data.player1Dead.setLocation(70, 370);
-					endRound();
 				}
 				// Checks if player 2you hit the ground
-				if (player2.getY() > FlappyBird.GROUND_LEVEL - Data.player2Flat.getHeight()) {
-					Music.playSound("Music/falling.wav");
-					player2.downwardSpeed = 0;
-					add(Data.player2Dead);
-					endRound();
+				if (player2.getY() > SCREEN_HEIGHT - 30) {
+					player2.setY(15);
+					player2.downwardSpeed = 0 ;
 				}
 			}
 
@@ -150,6 +152,7 @@ public class FlappyBird extends GraphicsProgram {
 					Music.playSound("Music/falling.wav");
 					player1.downwardSpeed = Math.min(0, player1.downwardSpeed);
 					currentMode = 2;
+					endRound();
 				}
 
 				// Checks if you hit a pipe
@@ -157,15 +160,22 @@ public class FlappyBird extends GraphicsProgram {
 					Music.playSound("Music/falling.wav");
 					player1.downwardSpeed = Math.min(0, player1.downwardSpeed);
 					currentMode = 2;
+					endRound();
 				}
 
 			}
 
 			// Animate the foreground
 			if (FlappyBird.currentMode < 2) {
+			//make the background look like it is moving
+				Data.backgroundDay.setLocation(-backgroundOffset, 0);
+				Data.backgroundNight.setLocation(-backgroundOffset, 0);
+				backgroundOffset = (backgroundOffset + 5) % SCREEN_WIDTH;
+				//add backgournd2 to the part that is now white
+				//avoid the screen flashign white by adding the second background
+				Data.backgroundDay2.setLocation(SCREEN_WIDTH - backgroundOffset, 0);
+				Data.backgroundNight2.setLocation(SCREEN_WIDTH - backgroundOffset, 0);
 
-				Data.ground.setLocation(-groundOffset, FlappyBird.GROUND_LEVEL);
-				groundOffset = (groundOffset + 4) % 24;
 
 			}
 
@@ -321,7 +331,11 @@ public class FlappyBird extends GraphicsProgram {
 		isNight = !isNight;
 		// Change background
 		Data.backgroundDay.setVisible(isNight);
+		Data.backgroundDay2.setVisible(isNight);
+		Data.backgroundDay3.setVisible(isNight);
 		Data.backgroundNight.setVisible(!isNight);
+		Data.backgroundNight2.setVisible(!isNight);
+		Data.backgroundNight3.setVisible(!isNight);
 
 		for (int i = 0; i < 4; i++) {
 
@@ -437,9 +451,6 @@ public class FlappyBird extends GraphicsProgram {
 		Data.player2Flat.setLocation(-100, 0);
 		Data.player2Down.setLocation(-100, 0);
 		Data.player2Up.setLocation(-100, 0);
-
-		// Foreground
-		add(Data.ground);
 
 		// Other
 		add(Data.gameOver);
