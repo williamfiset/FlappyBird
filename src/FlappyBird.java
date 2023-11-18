@@ -21,7 +21,7 @@ public class FlappyBird extends GraphicsProgram {
 	FileHandler highScoreFile; // Used to save the high score to a file
 
 	static int currentMode = 0; // 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
-	static int[] score = { 0, 0, 0 }; // player 1, total, player 2
+	static int score1, score2, total;
 	boolean isNight = true; // true = night, false = day
 	int scoreChange = 0; //needed to determin if night should change
 
@@ -89,8 +89,8 @@ public class FlappyBird extends GraphicsProgram {
 			add(Data.pipeMiddleNight[i]);
 		}
 		add(Data.getReady);
-		score[1] = score[0] + score[2];
-		if (score[1] > (scoreInterval * 100)) { // fix this for 2 players
+		total = score1 + score2;
+		if (total > (scoreInterval * 100)) { // fix this for 2 players
 			add(Data.birdLogo);
 		}
 		add(Data.instructions);
@@ -242,6 +242,24 @@ public class FlappyBird extends GraphicsProgram {
 
 	}
 
+	private void calculateScore(Bird player, int scoreIndex, int i) {
+		if (scoreIndex == 1) {
+			if (player.getY() < topOfMiddlePipe[i] + 55.5) {
+				score1 += 100 - distance1[i];
+			} else if (player.getY() > bottomOfMiddlePipe[i] - 55.5) {
+				score1 += 100 - distance2[i];
+			}
+		} else {
+			if (player.getY() < topOfMiddlePipe[i] + 55.5) {
+				score2 += 100 - distance1[i];
+			} else if (player.getY() > bottomOfMiddlePipe[i] - 55.5) {
+				score2 += 100 - distance2[i];
+			}
+		}
+	}
+	
+
+
 	/** Moves the pipes to the left, warping to the right side if needed **/
 	public void movePipes() {
 
@@ -268,33 +286,22 @@ public class FlappyBird extends GraphicsProgram {
 			if (Data.pipeBottomDay[i].getX() == BIRD1_X_START + 2) {
 
 				// award score for each pipe that you pass
+				calculateScore(player1, 1, i);
+				calculateScore(player2, 2, i);
 
-				// if the bird is between the top and middle pipes
-				if (player1.getY() < topOfMiddlePipe[i] + 55.5) {
-					score[0] += 100 - distance1[i];
-				} else {
-					score[0] += 100 - distance2[i];
-				}
+				//update average score between pipes
 				pipeCounter += 2;
 				totalPipeScore += distance1[i] + distance2[i];
 				scoreInterval = totalPipeScore / pipeCounter;
 
-				// if (Data.pipeBottomDay[i].getX() == BIRD2_X_START + 2) {
+				//print scor into terminal
+				System.out.println(score1);
 
-				// award score for each pipe that you pass
-
-				// if the bird is between the top and middle pipes
-				if (player2.getY() < topOfMiddlePipe[i] + 55.5) {
-					score[2] += 100 - distance1[i];
-				} else {
-					score[2] += 100 - distance2[i];
-				}
-
-				score[1] = score[0] + score[2]; //total score
+				total = score1 + score2; //total score
 				drawScore();
 				// calls isNight every 250 points
-				if ((int) score[1] / 500 > scoreChange) {
-					scoreChange = (int) ( score[1]) / 500;
+				if ((int) total / 500 > scoreChange) {
+					scoreChange = (int) ( total) / 500;
 					changeNight();
 				}
 				Music.playSound("Music/coinSound.wav");
@@ -385,7 +392,7 @@ public class FlappyBird extends GraphicsProgram {
 		bottomOfTopPipe[i] = (int) Math.max(Data.pipeTopDay[i].getY() + 320, 0);
 
 		// y location OF top of bottom pipe or the ground whichever is higher
-		topOfBottomPipe[i] = (int) Math.min(Data.pipeBottomDay[i].getY(), GROUND_LEVEL);
+		topOfBottomPipe[i] = (int) Math.min(Data.pipeBottomDay[i].getY(), SCREEN_HEIGHT);
 
 		// y of top of middle pipe
 		topOfMiddlePipe[i] = (int) Data.pipeMiddleDay[i].getY();
@@ -460,16 +467,16 @@ public class FlappyBird extends GraphicsProgram {
 		// Award medal if applicable
 
 		// Determines the interval for each medal
-		score[1] = (int) (score[0] + score[2]); // total score
-		if (score[1] > scoreInterval * 100)
+		total = (score1 + score2); // total score
+		if (total > scoreInterval * 100)
 			add(Data.birdMedal);
-		else if (score[1] > scoreInterval * 40)
+		else if (total > scoreInterval * 40)
 			add(Data.platinumMedal);
-		else if (score[1] > scoreInterval * 30)
+		else if (total > scoreInterval * 30)
 			add(Data.goldMedal);
-		else if (score[1] > scoreInterval * 20)
+		else if (total > scoreInterval * 20)
 			add(Data.silverMedal);
-		else if (score[1] > scoreInterval * 10)
+		else if (total > scoreInterval * 10)
 			add(Data.bronzeMedal);
 
 		// Retrieve high score from file
@@ -478,14 +485,14 @@ public class FlappyBird extends GraphicsProgram {
 
 		// Sets the users score to zero for trying to cheat
 		if (highScoreFile.fileHasBeenManipulated()) {
-			drawBoardScore(1, score[2]);
+			drawBoardScore(1, total);
 			Data.new_.setLocation(-100, 0);
 		}
 
 		// Update HighScore
-		else if (score[1] > highScore) {
-			highScoreFile.updateHighScore(Integer.toString(score[2]));
-			drawBoardScore(1, score[1]);
+		else if (total > highScore) {
+			highScoreFile.updateHighScore(Integer.toString(total));
+			drawBoardScore(1, total);
 			Data.new_.setLocation(164, 256);
 			;
 			// Draw old high score
@@ -495,7 +502,7 @@ public class FlappyBird extends GraphicsProgram {
 		}
 
 		add(Data.new_);
-		drawBoardScore(0, score[1]);
+		drawBoardScore(0, total);
 
 	}
 
@@ -521,29 +528,30 @@ public class FlappyBird extends GraphicsProgram {
 		// Game setup
 		resetPipes();
 		add(Data.getReady);
-		score[1] = (int) (score[0] + score[2]); // total score
-		if (score[1] > scoreInterval * 100) {
+		total = (score1 + score2); // total score
+		if (total > scoreInterval * 100) {
 			add(Data.birdLogo);
 		}
 		add(Data.instructions);
 
 		// Remove elements from screen
-		if (score[1] > scoreInterval * 100)
+		if (total > scoreInterval * 100)
 			remove(Data.birdMedal);
-		else if (score[1] > scoreInterval * 40)
+		else if (total > scoreInterval * 40)
 			remove(Data.platinumMedal);
-		else if (score[1] > scoreInterval * 30)
+		else if (total > scoreInterval * 30)
 			remove(Data.goldMedal);
-		else if (score[1] > scoreInterval * 20)
+		else if (total > scoreInterval * 20)
 			remove(Data.silverMedal);
-		else if (score[1] > scoreInterval * 10)
+		else if (total > scoreInterval * 10)
 			remove(Data.bronzeMedal);
 		remove(Data.scoreboard);
 		remove(Data.new_);
 
 		// Reset score
-		score[0] = 0; //player 1
-		score[2] = 0; // player 2
+		score1 = 0; //player 1
+		total = 0; // total
+		score2 = 0; // player 2
 		initializeDigits(false);
 
 		// Draw initial '0'
@@ -655,6 +663,7 @@ public class FlappyBird extends GraphicsProgram {
 	/** Draws your current score on the screen **/
 	protected void drawScore() {
 		// loop thru two scores
+		int[] score = { score1, total, score2 };
 		for (int i = 0; i < 3; i++) {
 			// Initialize variables
 			int widthScore = -1, digitCounter = 0;
@@ -666,11 +675,7 @@ public class FlappyBird extends GraphicsProgram {
 			// Take the score one digit at a time (from right to left), and associate the
 			// corresponding image of a number to that location in the array
 			do {
-				if (i == 1) {
-					Data.scoreDigits[i][digitCounter] = new GImage(Data.bigNums[score[i] % 10].getImage());
-				} else {
-					Data.scoreDigits[i][digitCounter] = new GImage(Data.medNums[score[i] % 10].getImage());
-				}
+				Data.scoreDigits[i][digitCounter] = new GImage(Data.medNums[score[i] % 10].getImage());
 				widthScore += Data.bigNums[score[i] % 10].getWidth() + 1;
 				score[i] /= 10;
 				digitCounter++;
