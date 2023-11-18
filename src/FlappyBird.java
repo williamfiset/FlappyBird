@@ -485,7 +485,7 @@ public class FlappyBird extends GraphicsProgram {
 
 		// Sets the users score to zero for trying to cheat
 		if (highScoreFile.fileHasBeenManipulated()) {
-			drawBoardScore(1, total);
+			drawBoardScore(1, highScore);
 			Data.new_.setLocation(-100, 0);
 		}
 
@@ -664,6 +664,7 @@ public class FlappyBird extends GraphicsProgram {
 	protected void drawScore() {
 		// loop thru two scores
 		int[] score = { score1, total, score2 };
+		int[][] drawLocation =  {{ 85, SCREEN_WIDTH - 85, 85 }, { 425, 425, 447}};
 		for (int i = 0; i < 3; i++) {
 			// Initialize variables
 			int widthScore = -1, digitCounter = 0;
@@ -675,22 +676,22 @@ public class FlappyBird extends GraphicsProgram {
 			// Take the score one digit at a time (from right to left), and associate the
 			// corresponding image of a number to that location in the array
 			do {
-				Data.scoreDigits[i][digitCounter] = new GImage(Data.medNums[score[i] % 10].getImage());
+				if (i == 1){
+					Data.scoreDigits[i][digitCounter] = new GImage(Data.bigNums[score[i] % 10].getImage());
+				}else{
+					Data.scoreDigits[i][digitCounter] = new GImage(Data.medNums[score[i] % 10].getImage());
+				}	
 				widthScore += Data.bigNums[score[i] % 10].getWidth() + 1;
 				score[i] /= 10;
 				digitCounter++;
 			} while (score[i] > 0);
 
 			// Draw the score on the scoreboard
-			int startPoint = (SCREEN_WIDTH / 2) - (widthScore / 2);
+			int startPoint = drawLocation[0][i] - (widthScore / 2);
 			// Draw the number on screen
 			for (int n = 0; n < digitCounter; n++) {
 				int index = digitCounter - n - 1;
-				if (i == 1) {
-					Data.scoreDigits[i][index].setLocation(startPoint - (i * 75) + 65, 430);
-				} else {
-					Data.scoreDigits[i][index].setLocation(startPoint - (i * 75) + 65, 440);
-				}
+				Data.scoreDigits[i][index].setLocation(startPoint, drawLocation[1][i]);
 				add(Data.scoreDigits[i][index]);
 				startPoint += Data.scoreDigits[i][index].getWidth() + 1;
 			}
