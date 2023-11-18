@@ -147,18 +147,19 @@ public class FlappyBird extends GraphicsProgram {
 
 				movePipes();
 
-				// Checks if you hit a pipe
-				if (player1.pipeCollision()) {
-					Music.playSound("Music/falling.wav");
-					player1.downwardSpeed = Math.min(0, player1.downwardSpeed);
-					currentMode = 2;
-					endRound();
-				}
+				// // Checks if you hit a pipe
+				// if (player1.pipeCollision()) {
+				// 	Music.playSound("Music/falling.wav");
+				// 	player1.downwardSpeed = Math.min(0, player1.downwardSpeed);
+				// 	currentMode = 2;
+				// moveBirdsOffScreen()
+				// 	endRound();
+				// }
 
 				// Checks if you hit a pipe
-				if (player1.pipeCollision()) {
+				if (player2.pipeCollision()) {
 					Music.playSound("Music/falling.wav");
-					player1.downwardSpeed = Math.min(0, player1.downwardSpeed);
+					player2.downwardSpeed = Math.min(0, player2.downwardSpeed);
 					currentMode = 2;
 					endRound();
 				}
@@ -337,9 +338,11 @@ public class FlappyBird extends GraphicsProgram {
 	public void changeNight() {
 		isNight = !isNight;
 		// Change background
+		// day backgrounds used for moving backgorund
 		Data.backgroundDay.setVisible(isNight);
 		Data.backgroundDay2.setVisible(isNight);
 		Data.backgroundDay3.setVisible(isNight);
+		// night backgrounds used for moving backgorund
 		Data.backgroundNight.setVisible(!isNight);
 		Data.backgroundNight2.setVisible(!isNight);
 		Data.backgroundNight3.setVisible(!isNight);
@@ -430,6 +433,19 @@ public class FlappyBird extends GraphicsProgram {
 		Data.pipeMiddleNight[i].move(0, randomAltitude + 56);
 	}
 
+	//function to move birds off screen
+	public void moveBirdsOffScreen() {
+		// Player 1
+		Data.player1Flat.setLocation(-100, 0);
+		Data.player1Down.setLocation(-100, 0);
+		Data.player1Up.setLocation(-100, 0);
+
+		// //Player 2
+		Data.player2Flat.setLocation(-100, 0);
+		Data.player2Down.setLocation(-100, 0);
+		Data.player2Up.setLocation(-100, 0);
+	}
+
 	/** Displays the graphics for the end of a round **/
 	public void endRound() {
 
@@ -440,7 +456,7 @@ public class FlappyBird extends GraphicsProgram {
 				remove(Data.pipeDigits2[i][n]);
 			}
 		}
-
+		moveBirdsOffScreen();
 
 		// randomize night
 
@@ -448,16 +464,6 @@ public class FlappyBird extends GraphicsProgram {
 		player1.animationCounter = 0;
 		player2.animationCounter = 0;
 		// remove the birds
-
-		// Player 1
-		Data.player1Flat.setLocation(-100, 0);
-		Data.player1Down.setLocation(-100, 0);
-		Data.player1Up.setLocation(-100, 0);
-
-		// //Player 2
-		Data.player2Flat.setLocation(-100, 0);
-		Data.player2Down.setLocation(-100, 0);
-		Data.player2Up.setLocation(-100, 0);
 
 		// Other
 		add(Data.gameOver);
@@ -511,8 +517,6 @@ public class FlappyBird extends GraphicsProgram {
 		// Remove elements from screen
 		remove(Data.replayButton);
 		remove(Data.gameOver);
-		remove(Data.player1Dead);
-		remove(Data.player2Dead);
 		changeNight();
 
 		// Adjust Variables

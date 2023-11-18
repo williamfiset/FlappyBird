@@ -17,8 +17,8 @@ public abstract class Data {
 	public static BufferedImage fullImage = null;
 
 	public static GImage ground, birdLogo, birdMedal,
-			player1Flat, player1Up, player1Down, player1Dead,
-			player2Flat, player2Up, player2Down, player2Dead,
+			player1Flat, player1Up, player1Down,
+			player2Flat, player2Up, player2Down,
 			backgroundDay, backgroundNight, 
 			backgroundDay2, backgroundNight2,
 			backgroundDay3, backgroundNight3,
@@ -112,12 +112,10 @@ public abstract class Data {
 		Data.player1Up = makeImage(fullImage, 230, 762, 263, 785);
 		Data.player1Flat = makeImage(fullImage, 230, 814, 263, 837);
 		Data.player1Down = makeImage(fullImage, 230, 866, 263, 889);
-		Data.player1Dead = makeImage(fullImage, 367, 982, 397, 1020);
 		// (green for the player 2)
 		Data.player2Up = makeImage(fullImage, 6, 983, 39, 1006);
 		Data.player2Flat = makeImage(fullImage, 62, 983, 95, 1006);
 		Data.player2Down = makeImage(fullImage, 118, 983, 151, 1006);
-		Data.player2Dead = makeImage(fullImage, 297, 982, 327, 1020);
 
 		// Misc.
 		Data.getReady = makeImage(fullImage, 584, 116, 780, 180);
@@ -149,12 +147,10 @@ public abstract class Data {
 		Data.player1Flat.setLocation(-100, 0);
 		Data.player1Down.setLocation(-100, 0);
 		Data.player1Up.setLocation(-100, 0);
-		Data.player2Dead.setLocation(FlappyBird.BIRD1_X_START, 371);
 		// Player 2
 		Data.player2Flat.setLocation(-100, 0);
 		Data.player2Down.setLocation(-100, 0);
 		Data.player2Up.setLocation(-100, 0);
-		Data.player2Dead.setLocation(FlappyBird.BIRD2_X_START, 371);
 
 		// Misc.
 		Data.getReady.setLocation(45, 170);
