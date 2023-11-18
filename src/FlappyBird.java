@@ -117,6 +117,15 @@ public class FlappyBird extends GraphicsProgram {
 
 	}
 
+	private void handlePipeCollision(Bird player) {
+				if (player.pipeCollision()) {
+					Music.playSound("Music/falling.wav");
+					player.downwardSpeed = Math.min(0, player.downwardSpeed);
+					currentMode = 2;
+					endRound();
+				}
+			}
+
 	/** run Contains the Game Loop **/
 	@Override
 	public void run() {
@@ -147,22 +156,8 @@ public class FlappyBird extends GraphicsProgram {
 
 				movePipes();
 
-				// // Checks if you hit a pipe
-				// if (player1.pipeCollision()) {
-				// 	Music.playSound("Music/falling.wav");
-				// 	player1.downwardSpeed = Math.min(0, player1.downwardSpeed);
-				// 	currentMode = 2;
-				// moveBirdsOffScreen()
-				// 	endRound();
-				// }
-
-				// Checks if you hit a pipe
-				if (player2.pipeCollision()) {
-					Music.playSound("Music/falling.wav");
-					player2.downwardSpeed = Math.min(0, player2.downwardSpeed);
-					currentMode = 2;
-					endRound();
-				}
+				handlePipeCollision(player1);
+				handlePipeCollision(player2);
 
 			}
 
@@ -310,21 +305,8 @@ public class FlappyBird extends GraphicsProgram {
 
 			// Re-spawns the pipe if they have already slid across the screen
 			if (Data.pipeBottomDay[i].getX() < -(SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2)) {
-
-				Data.pipeTopDay[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
-				Data.pipeBottomDay[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
-						(GROUND_LEVEL / 2));
-				// create middle pipe between top and bottom
-				Data.pipeMiddleDay[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
-						(GROUND_LEVEL / 2) - 118);
-
-				Data.pipeTopNight[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
-				Data.pipeBottomNight[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
-						(GROUND_LEVEL / 2));
-				// create middle pipe between top and bottom
-				Data.pipeMiddleNight[i].setLocation(SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
-						(GROUND_LEVEL / 2) - 118);
-
+				respawnPipe(Data.pipeTopDay[i], Data.pipeBottomDay[i], Data.pipeMiddleDay[i]);
+				respawnPipe(Data.pipeTopNight[i], Data.pipeBottomNight[i], Data.pipeMiddleNight[i]);
 				// Move pipe digits
 				randomizePipes(i);
 				findPipeCenters(i);
@@ -332,6 +314,17 @@ public class FlappyBird extends GraphicsProgram {
 
 		}
 
+	}
+
+	private void respawnPipe(GImage pipeTop, GImage pipeBottom, GImage pipeMiddle) {
+		double locationX = SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2);
+		double locationYTop = -118;
+		double locationYBottom = (GROUND_LEVEL / 2);
+		double locationYMiddle = (GROUND_LEVEL / 2) - 118;
+	
+		pipeTop.setLocation(locationX, locationYTop);
+		pipeBottom.setLocation(locationX, locationYBottom);
+		pipeMiddle.setLocation(locationX, locationYMiddle);
 	}
 
 	// change night function
