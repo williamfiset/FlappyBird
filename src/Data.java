@@ -21,7 +21,7 @@ public abstract class Data {
 			player2Flat, player2Up, player2Down,
 			backgroundDay, backgroundNight, 
 			backgroundDay2, backgroundNight2,
-			backgroundDay3, backgroundNight3,
+			backgroundDay3, backgroundNight3,	
 			getReady, gameOver, instructions, scoreboard, replayButton,
 			bronzeMedal, silverMedal, goldMedal, platinumMedal, new_;
 
@@ -54,10 +54,11 @@ public abstract class Data {
 
 		// Background
 		Data.backgroundDay = makeImage(fullImage, 0, 0, 288, 512);
-		Data.backgroundNight = makeImage(fullImage, 292, 0, 580, 512);
 		Data.backgroundDay2 = makeImage(fullImage, 0, 0, 288, 512);
-		Data.backgroundNight2 = makeImage(fullImage, 292, 0, 580, 512);
 		Data.backgroundDay3 = makeImage(fullImage, 0, 0, 288, 512);
+
+		Data.backgroundNight = makeImage(fullImage, 292, 0, 580, 512);
+		Data.backgroundNight2 = makeImage(fullImage, 292, 0, 580, 512);
 		Data.backgroundNight3 = makeImage(fullImage, 292, 0, 580, 512);
 		
 		// Pipes
@@ -152,21 +153,21 @@ public abstract class Data {
 		Data.player2Down.setLocation(-100, 0);
 		Data.player2Up.setLocation(-100, 0);
 
-		// Misc.
-		Data.getReady.setLocation(45, 170);
-		Data.instructions.setLocation(80, 234);
-		Data.birdLogo.setLocation(55, 60);
-		Data.gameOver.setLocation(40, 100);
-		Data.replayButton.setLocation(85, 330);
+		// Misc
+		Data.instructions.setLocation(backgroundDay.getWidth() - Data.instructions.getWidth() / 2, 234);
+		Data.getReady.setLocation(backgroundDay.getWidth() - Data.getReady.getWidth() / 2, 170);
+		Data.gameOver.setLocation(backgroundDay.getWidth() - Data.gameOver.getWidth() / 2, 100);
+		Data.replayButton.setLocation(backgroundDay.getWidth() - Data.replayButton.getWidth() / 2, 330);
+		Data.birdLogo.setLocation(backgroundDay.getWidth() - Data.birdLogo.getWidth() / 2, 60);
 
 		// Score Board
-		Data.scoreboard.setLocation(25, 195);
-		Data.bronzeMedal.setLocation(57, 240);
-		Data.silverMedal.setLocation(57, 240);
-		Data.goldMedal.setLocation(57, 240);
-		Data.platinumMedal.setLocation(57, 240);
-		Data.birdMedal.setLocation(55, 245);
-	}
+		Data.scoreboard.setLocation(backgroundDay.getWidth() - Data.scoreboard.getWidth() / 2, 195);
+		Data.silverMedal.setLocation(backgroundDay.getWidth() - 85, 240);
+		Data.bronzeMedal.setLocation(backgroundDay.getWidth() - 85, 240);
+		Data.goldMedal.setLocation(backgroundDay.getWidth() - 85, 240);
+		Data.platinumMedal.setLocation(backgroundDay.getWidth() - 85, 240);
+		Data.birdMedal.setLocation(backgroundDay.getWidth() - 87, 247);
+		}
 
 	/** Used to help get the sub-images from the sprite-sheet **/
 	protected static GImage makeImage(BufferedImage i, int xStart, int yStart, int xEnd, int yEnd) {

@@ -1,7 +1,7 @@
 
 /** 
 * Flappy Bird is a recreation of the popular mobile game created by Dong Nguyen.
-* NOTE: All graphics and sound effects were not created by us; however, all of the code was written by us.
+* NOTE: All graphics and sound effects were not crundeated by us; however, all of the code was written by us.
 * 
 * @Author Micah Stairs, William Fiset
 * @Version 2.0
@@ -23,16 +23,16 @@ public class FlappyBird extends GraphicsProgram {
 	static int currentMode = 0; // 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
 	static int score1, score2, total;
 	boolean isNight = true; // true = night, false = day
-	int scoreChange = 0; //needed to determin if night should change
+	int scoreChange = 0; // needed to determin if night should change
 
 	// award for the space between pipes
 	// center of the space between pipes
-	int[] pipeSpaceCenter1 = { 0, 0, 0, 0 }; 
-	int[] pipeSpaceCenter2 = { 0, 0, 0, 0 }; 
-	int[] distance1 = { 0, 0, 0, 0 };
-	int[] distance2 = { 0, 0, 0, 0 };
-	int[] topOfMiddlePipe = { 0, 0, 0, 0 }, bottomOfMiddlePipe = { 0, 0, 0, 0 },
-			bottomOfTopPipe = { 0, 0, 0, 0 }, topOfBottomPipe = { 0, 0, 0, 0 };
+	int[] pipeSpaceCenter1 = new int[4];
+	int[] pipeSpaceCenter2 = new int[4];
+	int[] distance1 = new int[4];
+	int[] distance2 = new int[4];
+	int[] topOfMiddlePipe = new int[4], bottomOfMiddlePipe = new int[4],
+			bottomOfTopPipe =new int[4], topOfBottomPipe = new int[4];
 
 	// space between pipes
 	int pipeSpace = 0;
@@ -67,16 +67,20 @@ public class FlappyBird extends GraphicsProgram {
 		changeNight();
 
 		// Adds starting images to screen
-		add(Data.backgroundNight3);
-		add(Data.backgroundDay3);
-		Data.backgroundDay3.setLocation(0,0);
-		Data.backgroundNight3.setLocation(0,0);
-
 		add(Data.backgroundNight);
 		add(Data.backgroundDay);
+		Data.backgroundDay.setLocation(0, 0);
+		Data.backgroundNight.setLocation(0, 0);
 
 		add(Data.backgroundNight2);
 		add(Data.backgroundDay2);
+		Data.backgroundDay2.setLocation(SCREEN_WIDTH, 0);
+		Data.backgroundNight2.setLocation(SCREEN_WIDTH, 0);
+
+		add(Data.backgroundNight3);
+		add(Data.backgroundDay3);
+		Data.backgroundDay3.setLocation(SCREEN_WIDTH * 2, 0);
+		Data.backgroundNight3.setLocation(SCREEN_WIDTH * 2, 0);
 
 		for (int i = 0; i < 4; i++) {
 			// Adds pipes to screen
@@ -88,19 +92,20 @@ public class FlappyBird extends GraphicsProgram {
 			add(Data.pipeBottomNight[i]);
 			add(Data.pipeMiddleNight[i]);
 		}
-		add(Data.getReady);
+		// add(Data.getReady);
 		total = score1 + score2;
-		if (total > (scoreInterval * 100)) { // fix this for 2 players
+		if (total > (scoreInterval * 100)) { // if score is greater than 100
 			add(Data.birdLogo);
 		}
-		add(Data.instructions);
+		//add(Data.instructions);
+		add(Data.scoreboard);
 		add(Data.player2Up);
 		add(Data.player1Up);
 
 		// Initializes the images for the running total digits so that it's not null
 		// (Places it out of view)
 		for (int n = 0; n < 10; n++) {
-			//loop thru 3 scores
+			// loop thru 3 scores
 			for (int i = 0; i < 3; i++) {
 				Data.scoreDigits[i][n] = new GImage(Data.bigNums[0].getImage());
 				Data.scoreDigits[i][n].setLocation(-100, 0);
@@ -118,18 +123,34 @@ public class FlappyBird extends GraphicsProgram {
 	}
 
 	private void handlePipeCollision(Bird player) {
-				if (player.pipeCollision()) {
-					Music.playSound("Music/falling.wav");
-					player.downwardSpeed = Math.min(0, player.downwardSpeed);
-					currentMode = 2;
-					endRound();
-				}
-			}
+		if (player.pipeCollision()) {
+			Music.playSound("Music/falling.wav");
+			player.downwardSpeed = Math.min(0, player.downwardSpeed);
+			currentMode = 2;
+			endRound();
+		}
+	}
+
+	private void moveAndWarpBackground(GImage background, GImage nextBackground) {
+		background.move(-5, 0);
+		if (background.getX() <= -SCREEN_WIDTH) {
+			background.setLocation(nextBackground.getX() + SCREEN_WIDTH - 10, 0);
+		}
+	}
+	
+	public void moveBackground() {
+		moveAndWarpBackground(Data.backgroundDay, Data.backgroundDay3);
+		moveAndWarpBackground(Data.backgroundDay2, Data.backgroundDay);
+		moveAndWarpBackground(Data.backgroundDay3, Data.backgroundDay2);
+	
+		moveAndWarpBackground(Data.backgroundNight, Data.backgroundNight3);
+		moveAndWarpBackground(Data.backgroundNight2, Data.backgroundNight);
+		moveAndWarpBackground(Data.backgroundNight3, Data.backgroundNight2);
+	}
 
 	/** run Contains the Game Loop **/
 	@Override
 	public void run() {
-		int backgroundOffset = 0;
 		while (true) {
 
 			// currentMode: 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
@@ -147,7 +168,7 @@ public class FlappyBird extends GraphicsProgram {
 				// Checks if player 2you hit the ground
 				if (player2.getY() > SCREEN_HEIGHT - 30) {
 					player2.setY(15);
-					player2.downwardSpeed = 0 ;
+					player2.downwardSpeed = 0;
 				}
 			}
 
@@ -160,20 +181,7 @@ public class FlappyBird extends GraphicsProgram {
 				handlePipeCollision(player2);
 
 			}
-
-			// Animate the foreground
-			if (FlappyBird.currentMode < 2) {
-			//make the background look like it is moving
-				Data.backgroundDay.setLocation(-backgroundOffset, 0);
-				Data.backgroundNight.setLocation(-backgroundOffset, 0);
-				backgroundOffset = (backgroundOffset + 5) % SCREEN_WIDTH;
-				//add backgournd2 to the part that is now white
-				//avoid the screen flashign white by adding the second background
-				Data.backgroundDay2.setLocation(SCREEN_WIDTH - backgroundOffset, 0);
-				Data.backgroundNight2.setLocation(SCREEN_WIDTH - backgroundOffset, 0);
-
-
-			}
+			moveBackground();
 
 			// Draw the bird with his flappy little wings
 			if (FlappyBird.currentMode < 3)
@@ -205,15 +213,18 @@ public class FlappyBird extends GraphicsProgram {
 	 **/
 	@Override
 	public void mousePressed(MouseEvent mouse) {
-
 		// Checks to see if click is on the white & green 'start' image
 		if (FlappyBird.currentMode == 3) {
-			if (mouse.getX() > 89 && mouse.getX() < 191 && mouse.getY() > 333 && mouse.getY() < 389)
+			// Assuming replayButton is a GImage or similar object with getX, getY, getWidth, and getHeight methods
+			if (mouse.getX() > Data.replayButton.getX() && 
+			    mouse.getX() < Data.replayButton.getX() + Data.replayButton.getWidth() && 
+				mouse.getY() > Data.replayButton.getY() && 
+				mouse.getY() < Data.replayButton.getY() + Data.replayButton.getHeight()) {
 				replayGame();
+			}
 			return;
 		}
 		respondToUserInput(2);
-
 	}
 
 	/** Responds to user input by invoking flapWing() or changing the game state **/
@@ -234,27 +245,30 @@ public class FlappyBird extends GraphicsProgram {
 			else if (player == 2)
 				player2.capHeight();
 			Music.playSound("Music/flap.wav");
+			// if (player1.getY() > 0){
+			// 	player1.downwardSpeed = -10;
+			// 	//set to bottom of screen
+			// 	player1.setY(SCREEN_HEIGHT - 30);
+			// }
 		}
 
 	}
 
 	private void calculateScore(Bird player, int scoreIndex, int i) {
-		if (scoreIndex == 1) {
-			if (player.getY() < topOfMiddlePipe[i] + 55.5) {
-				score1 += 100 - distance1[i];
-			} else if (player.getY() > bottomOfMiddlePipe[i] - 55.5) {
-				score1 += 100 - distance2[i];
-			}
-		} else {
-			if (player.getY() < topOfMiddlePipe[i] + 55.5) {
-				score2 += 100 - distance1[i];
-			} else if (player.getY() > bottomOfMiddlePipe[i] - 55.5) {
-				score2 += 100 - distance2[i];
-			}
-		}
-	}
-	
+		int[] scores = { score1, score2 };
+		int[] distances1 = { distance1[i], distance2[i] };
+		int[] distances2 = { distance2[i], distance1[i] };
 
+		if (player.getY() < topOfMiddlePipe[i] + 55.5) {
+			scores[scoreIndex - 1] += 100 - distances1[scoreIndex - 1];
+		} else if (player.getY() > bottomOfMiddlePipe[i] - 55.5) {
+			scores[scoreIndex - 1] += 100 - distances2[scoreIndex - 1];
+		}
+
+		// Update the original score variables
+		score1 = scores[0];
+		score2 = scores[1];
+	}
 
 	/** Moves the pipes to the left, warping to the right side if needed **/
 	public void movePipes() {
@@ -285,19 +299,16 @@ public class FlappyBird extends GraphicsProgram {
 				calculateScore(player1, 1, i);
 				calculateScore(player2, 2, i);
 
-				//update average score between pipes
+				// update average score between pipes
 				pipeCounter += 2;
 				totalPipeScore += distance1[i] + distance2[i];
 				scoreInterval = totalPipeScore / pipeCounter;
 
-				//print scor into terminal
-				System.out.println(score1);
-
-				total = score1 + score2; //total score
+				total = score1 + score2; // total score
 				drawScore();
 				// calls isNight every 250 points
 				if ((int) total / 500 > scoreChange) {
-					scoreChange = (int) ( total) / 500;
+					scoreChange = (int) (total) / 500;
 					changeNight();
 				}
 				Music.playSound("Music/coinSound.wav");
@@ -321,32 +332,34 @@ public class FlappyBird extends GraphicsProgram {
 		double locationYTop = -118;
 		double locationYBottom = (GROUND_LEVEL / 2);
 		double locationYMiddle = (GROUND_LEVEL / 2) - 118;
-	
+
 		pipeTop.setLocation(locationX, locationYTop);
 		pipeBottom.setLocation(locationX, locationYBottom);
 		pipeMiddle.setLocation(locationX, locationYMiddle);
 	}
 
 	private void changeVisibility(boolean isVisible, GImage... images) {
-		for (GImage image : images) 
-			image.setVisible(isVisible);
+		for (GImage image : images) {
+			if (image != null) {
+				image.setVisible(isVisible);
+			}
 		}
+	}
 
 	// change night function
-public void changeNight() {
-    isNight = !isNight;
+	public void changeNight() {
+		isNight = !isNight;
 
-    // Change background
-    changeVisibility(isNight, Data.backgroundDay, Data.backgroundDay2, Data.backgroundDay3);
-    changeVisibility(!isNight, Data.backgroundNight, Data.backgroundNight2, Data.backgroundNight3);
+		// Change background
+		changeVisibility(isNight, Data.backgroundDay, Data.backgroundDay2, Data.backgroundDay3);
+		changeVisibility(!isNight, Data.backgroundNight, Data.backgroundNight2, Data.backgroundNight3);
 
-    for (int i = 0; i < 4; i++) {
-        // Change pipes
-        changeVisibility(isNight, Data.pipeTopDay[i], Data.pipeBottomDay[i], Data.pipeMiddleDay[i]);
-        changeVisibility(!isNight, Data.pipeTopNight[i], Data.pipeBottomNight[i], Data.pipeMiddleNight[i]);
-    }
-}
-
+		for (int i = 0; i < 4; i++) {
+			// Change pipes
+			changeVisibility(isNight, Data.pipeTopDay[i], Data.pipeBottomDay[i], Data.pipeMiddleDay[i]);
+			changeVisibility(!isNight, Data.pipeTopNight[i], Data.pipeBottomNight[i], Data.pipeMiddleNight[i]);
+		}
+	}
 
 	/** Resets all 4 set of pipes to their starting locations **/
 	public void resetPipes() {
@@ -419,7 +432,7 @@ public void changeNight() {
 		Data.pipeMiddleNight[i].move(0, randomAltitude + 56);
 	}
 
-	//function to move birds off screen
+	// function to move birds off screen
 	public void moveBirdsOffScreen() {
 		// Player 1
 		Data.player1Flat.setLocation(-100, 0);
@@ -539,7 +552,7 @@ public void changeNight() {
 		remove(Data.new_);
 
 		// Reset score
-		score1 = 0; //player 1
+		score1 = 0; // player 1
 		total = 0; // total
 		score2 = 0; // player 2
 		initializeDigits(false);
@@ -654,23 +667,23 @@ public void changeNight() {
 	protected void drawScore() {
 		// loop thru two scores
 		int[] score = { score1, total, score2 };
-		int[][] drawLocation =  {{ 85, SCREEN_WIDTH - 85, 85 }, { 425, 425, 447}};
+		int[][] drawLocation = { { 85, SCREEN_WIDTH - 85, 85 }, { 425, 425, 447 } };
 		for (int i = 0; i < 3; i++) {
 			// Initialize variables
 			int widthScore = -1, digitCounter = 0;
 
 			// Remove the previous score
-				for (int n = 0; n < 10; n++) {
-					remove(Data.scoreDigits[i][n]);
-				}
+			for (int n = 0; n < 10; n++) {
+				remove(Data.scoreDigits[i][n]);
+			}
 			// Take the score one digit at a time (from right to left), and associate the
 			// corresponding image of a number to that location in the array
 			do {
-				if (i == 1){
+				if (i == 1) {
 					Data.scoreDigits[i][digitCounter] = new GImage(Data.bigNums[score[i] % 10].getImage());
-				}else{
+				} else {
 					Data.scoreDigits[i][digitCounter] = new GImage(Data.medNums[score[i] % 10].getImage());
-				}	
+				}
 				widthScore += Data.bigNums[score[i] % 10].getWidth() + 1;
 				score[i] /= 10;
 				digitCounter++;
