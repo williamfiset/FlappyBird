@@ -327,33 +327,26 @@ public class FlappyBird extends GraphicsProgram {
 		pipeMiddle.setLocation(locationX, locationYMiddle);
 	}
 
-	// change night function
-	public void changeNight() {
-		isNight = !isNight;
-		// Change background
-		// day backgrounds used for moving backgorund
-		Data.backgroundDay.setVisible(isNight);
-		Data.backgroundDay2.setVisible(isNight);
-		Data.backgroundDay3.setVisible(isNight);
-		// night backgrounds used for moving backgorund
-		Data.backgroundNight.setVisible(!isNight);
-		Data.backgroundNight2.setVisible(!isNight);
-		Data.backgroundNight3.setVisible(!isNight);
-
-		for (int i = 0; i < 4; i++) {
-
-			// Change pipes
-			// Player 1
-			Data.pipeTopDay[i].setVisible(isNight);
-			Data.pipeBottomDay[i].setVisible(isNight);
-			Data.pipeMiddleDay[i].setVisible(isNight);
-			// Player 2
-			Data.pipeTopNight[i].setVisible(!isNight);
-			Data.pipeBottomNight[i].setVisible(!isNight);
-			Data.pipeMiddleNight[i].setVisible(!isNight);
-
+	private void changeVisibility(boolean isVisible, GImage... images) {
+		for (GImage image : images) 
+			image.setVisible(isVisible);
 		}
-	}
+
+	// change night function
+public void changeNight() {
+    isNight = !isNight;
+
+    // Change background
+    changeVisibility(isNight, Data.backgroundDay, Data.backgroundDay2, Data.backgroundDay3);
+    changeVisibility(!isNight, Data.backgroundNight, Data.backgroundNight2, Data.backgroundNight3);
+
+    for (int i = 0; i < 4; i++) {
+        // Change pipes
+        changeVisibility(isNight, Data.pipeTopDay[i], Data.pipeBottomDay[i], Data.pipeMiddleDay[i]);
+        changeVisibility(!isNight, Data.pipeTopNight[i], Data.pipeBottomNight[i], Data.pipeMiddleNight[i]);
+    }
+}
+
 
 	/** Resets all 4 set of pipes to their starting locations **/
 	public void resetPipes() {
