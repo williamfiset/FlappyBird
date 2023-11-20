@@ -14,7 +14,7 @@ import java.awt.event.*;
 
 public class FlappyBird extends GraphicsProgram {
 
-	final static int SCREEN_WIDTH = 288, SCREEN_HEIGHT = 512, GROUND_LEVEL = 400, PIPE_WIDTH = 52,
+	final static int SCREEN_WIDTH = 288 * 2, SCREEN_HEIGHT = 512, GROUND_LEVEL = 400, PIPE_WIDTH = 52,
 			BIRD1_X_START = 68, BIRD2_X_START = 68;
 
 	Bird player1, player2; // The bird that the user controls
@@ -74,13 +74,13 @@ public class FlappyBird extends GraphicsProgram {
 
 		add(Data.backgroundNight2);
 		add(Data.backgroundDay2);
-		Data.backgroundDay2.setLocation(SCREEN_WIDTH, 0);
-		Data.backgroundNight2.setLocation(SCREEN_WIDTH, 0);
+		Data.backgroundDay2.setLocation(SCREEN_WIDTH / 2, 0);
+		Data.backgroundNight2.setLocation(SCREEN_WIDTH / 2, 0);
 
 		add(Data.backgroundNight3);
 		add(Data.backgroundDay3);
-		Data.backgroundDay3.setLocation(SCREEN_WIDTH * 2, 0);
-		Data.backgroundNight3.setLocation(SCREEN_WIDTH * 2, 0);
+		Data.backgroundDay3.setLocation(SCREEN_WIDTH, 0);
+		Data.backgroundNight3.setLocation(SCREEN_WIDTH, 0);
 
 		for (int i = 0; i < 4; i++) {
 			// Adds pipes to screen
@@ -92,13 +92,12 @@ public class FlappyBird extends GraphicsProgram {
 			add(Data.pipeBottomNight[i]);
 			add(Data.pipeMiddleNight[i]);
 		}
-		// add(Data.getReady);
+		add(Data.getReady);
 		total = score1 + score2;
 		if (total > (scoreInterval * 100)) { // if score is greater than 100
 			add(Data.birdLogo);
 		}
-		//add(Data.instructions);
-		add(Data.scoreboard);
+		add(Data.instructions);
 		add(Data.player2Up);
 		add(Data.player1Up);
 
@@ -133,8 +132,8 @@ public class FlappyBird extends GraphicsProgram {
 
 	private void moveAndWarpBackground(GImage background, GImage nextBackground) {
 		background.move(-5, 0);
-		if (background.getX() <= -SCREEN_WIDTH) {
-			background.setLocation(nextBackground.getX() + SCREEN_WIDTH - 10, 0);
+		if (background.getX() <= -SCREEN_WIDTH /2) {
+			background.setLocation(nextBackground.getX() + SCREEN_WIDTH / 2 - 10, 0);
 		}
 	}
 	
@@ -315,7 +314,7 @@ public class FlappyBird extends GraphicsProgram {
 			}
 
 			// Re-spawns the pipe if they have already slid across the screen
-			if (Data.pipeBottomDay[i].getX() < -(SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2)) {
+			if (Data.pipeBottomDay[i].getX() <  - (PIPE_WIDTH / 2) ) {
 				respawnPipe(Data.pipeTopDay[i], Data.pipeBottomDay[i], Data.pipeMiddleDay[i]);
 				respawnPipe(Data.pipeTopNight[i], Data.pipeBottomNight[i], Data.pipeMiddleNight[i]);
 				// Move pipe digits
@@ -328,7 +327,7 @@ public class FlappyBird extends GraphicsProgram {
 	}
 
 	private void respawnPipe(GImage pipeTop, GImage pipeBottom, GImage pipeMiddle) {
-		double locationX = SCREEN_WIDTH + (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2);
+		double locationX = SCREEN_WIDTH - (PIPE_WIDTH / 2);
 		double locationYTop = -118;
 		double locationYBottom = (GROUND_LEVEL / 2);
 		double locationYMiddle = (GROUND_LEVEL / 2) - 118;
@@ -366,22 +365,22 @@ private void changeVisibility(boolean isVisible, GImage... images) {
 
 		// Reset pipes
 		for (int i = 0; i < 4; i++) {
-
+				
 			// Move pipes
-			Data.pipeTopDay[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
-			Data.pipeBottomDay[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
+			Data.pipeTopDay[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2), -118);
+			Data.pipeBottomDay[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2));
 			// create middle pipe between top and bottom
-			Data.pipeMiddleDay[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
+			Data.pipeMiddleDay[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2) - 118);
-
-			Data.pipeTopNight[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2), -118);
-			Data.pipeBottomNight[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
+	
+			Data.pipeTopNight[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2), -118);
+			Data.pipeBottomNight[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2));
 			// create middle pipe between top and bottom
-			Data.pipeMiddleNight[i].setLocation(SCREEN_WIDTH * 2 + i * (SCREEN_WIDTH / 2) - (PIPE_WIDTH / 2),
+			Data.pipeMiddleNight[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2),
 					(GROUND_LEVEL / 2) - 118);
-
+	
 			randomizePipes(i);
 			findPipeCenters(i);
 		}

@@ -28,7 +28,7 @@ public class GameStarter{
 
         // Set default Program values
         appletFrame.setResizable(false);
-        appletFrame.setSize(FlappyBird.SCREEN_WIDTH * 2, FlappyBird.SCREEN_HEIGHT);
+        appletFrame.setSize(FlappyBird.SCREEN_WIDTH, FlappyBird.SCREEN_HEIGHT);
         appletFrame.setVisible(true); 
         appletFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 
