@@ -178,7 +178,7 @@ public class FlappyBird extends GraphicsProgram {
 				movePipes();
 
 				handlePipeCollision(player1);
-				handlePipeCollision(player2);
+				// handlePipeCollision(player2);
 
 			}
 			moveBackground();
@@ -338,13 +338,13 @@ public class FlappyBird extends GraphicsProgram {
 		pipeMiddle.setLocation(locationX, locationYMiddle);
 	}
 
-	private void changeVisibility(boolean isVisible, GImage... images) {
-		for (GImage image : images) {
-			if (image != null) {
-				image.setVisible(isVisible);
-			}
-		}
-	}
+private void changeVisibility(boolean isVisible, GImage... images) {
+    for (GImage image : images) {
+        if (image != null) {
+            image.setVisible(isVisible);
+        }
+    }
+}
 
 	// change night function
 	public void changeNight() {
@@ -498,7 +498,7 @@ public class FlappyBird extends GraphicsProgram {
 		else if (total > highScore) {
 			highScoreFile.updateHighScore(Integer.toString(total));
 			drawBoardScore(1, total);
-			Data.new_.setLocation(164, 256);
+			Data.new_.setLocation(Data.backgroundDay.getWidth() + 20, 256);
 			;
 			// Draw old high score
 		} else {
@@ -590,7 +590,7 @@ public class FlappyBird extends GraphicsProgram {
 
 		// Initialize variables
 		boolean drawing = true;
-		int startPoint = 235;
+		int startPoint = (int) Data.backgroundDay.getWidth() + 92;
 
 		// Remove previous digit and add the new one, placing it out of view if
 		// neccesary

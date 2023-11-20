@@ -119,7 +119,7 @@ public class Bird extends FlappyBird {
 
 	/** Makes sure that the bird doesn't go off screen **/
 	public void capHeight() {
-		if (this.getY() > 0)
+		// if (this.getY() > 0)
 			this.downwardSpeed = 10;
 	}
 
