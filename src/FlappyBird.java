@@ -360,29 +360,29 @@ private void changeVisibility(boolean isVisible, GImage... images) {
 		}
 	}
 
-	/** Resets all 4 set of pipes to their starting locations **/
 	public void resetPipes() {
-
 		// Reset pipes
 		for (int i = 0; i < 4; i++) {
-				
-			// Move pipes
-			Data.pipeTopDay[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2), -118);
-			Data.pipeBottomDay[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2),
-					(GROUND_LEVEL / 2));
-			// create middle pipe between top and bottom
-			Data.pipeMiddleDay[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2),
-					(GROUND_LEVEL / 2) - 118);
+			// Calculate x-coordinate for pipe location
+			double x = SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2);
 	
-			Data.pipeTopNight[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2), -118);
-			Data.pipeBottomNight[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2),
-					(GROUND_LEVEL / 2));
-			// create middle pipe between top and bottom
-			Data.pipeMiddleNight[i].setLocation(SCREEN_WIDTH + i * (SCREEN_WIDTH / 4) - (PIPE_WIDTH / 2),
-					(GROUND_LEVEL / 2) - 118);
+			// Move pipes
+			setLocationForPipe(Data.pipeTopDay[i], x, -118);
+			setLocationForPipe(Data.pipeBottomDay[i], x, (GROUND_LEVEL / 2));
+			setLocationForPipe(Data.pipeMiddleDay[i], x, (GROUND_LEVEL / 2) - 118);
+	
+			setLocationForPipe(Data.pipeTopNight[i], x, -118);
+			setLocationForPipe(Data.pipeBottomNight[i], x, (GROUND_LEVEL / 2));
+			setLocationForPipe(Data.pipeMiddleNight[i], x, (GROUND_LEVEL / 2) - 118);
 	
 			randomizePipes(i);
 			findPipeCenters(i);
+		}
+	}
+	
+	private void setLocationForPipe(GImage pipe, double x, double y) {
+		if (pipe != null) {
+			pipe.setLocation(x, y);
 		}
 	}
 
