@@ -56,10 +56,13 @@ public class Bird extends FlappyBird {
 
 		// scale bird size based on Y location
 
-		double scalingFactor = 7; // Adjust this value to make the bird scale slower
-		double maxSize = 20.0; // Adjust this value to set the maximum size
+		double scalingFactor = 10; // Adjust this value to make the bird scale slower
+		double maxSize = 25.0; // Adjust this value to set the maximum size
+		double minSize = 15.0; // Adjust this value to set the minimum size
 
 		double birdHeight = Math.min((this.getY() / scalingFactor), maxSize);
+		if (birdHeight < minSize)
+			birdHeight = minSize;
 
 		double birdWidth = birdHeight * 1.5; // Maintain the original proportions
 
