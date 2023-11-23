@@ -112,20 +112,55 @@ public class Bird extends FlappyBird {
 	}
 
 	/** Makes the bird move downwards **/
-	public void fly() {
-
+	public void fly(boolean isNight) {
+		// if day bird moves as normal
 		// Move Flappy Bird
-		this.downwardSpeed -= 1;
+		if (isNight == false) {
+			
+
+			if (this.getY() < 0) {
+				this.setY(SCREEN_HEIGHT);
+				this.downwardSpeed = 0;
+			}
+
+		} else if (isNight == true){
+
+			this.downwardSpeed -= 1;
+
+			if (this.getY() > SCREEN_HEIGHT) {
+				this.setY(0);
+				this.downwardSpeed = 0;
+			}
+
+		}
+
 		this.setY(this.getY() - this.downwardSpeed);
+		// if night bird moves opposite dirrection
 
 	}
 
-//looop bird form top to bottom
-	public void capHeight() {
-		if (this.getY() < 30){
-			this.setY(400);
+	// loop bird form top to bottom
+	public void capHeight(boolean isNight) {
+		if (isNight == false) {
+
+			this.downwardSpeed = -10;
+
+			if (this.getY() > SCREEN_HEIGHT) {
+				this.setY(0);
+			}
+
 		}
+		
+		if (isNight == true) {
+
 			this.downwardSpeed = 10;
+
+			if (this.getY() < 0) {
+				this.setY(SCREEN_HEIGHT);
+			}
+
+		}
+
 	}
 
 	/** Animates the Flappy bird **/

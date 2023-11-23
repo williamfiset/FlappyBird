@@ -156,25 +156,19 @@ public class FlappyBird extends GraphicsProgram {
 
 			if (FlappyBird.currentMode == 1 || FlappyBird.currentMode == 2) {
 
-				player1.fly();
-				player2.fly();
-
-				// Checks if player1 you hit the ground
-				if (player1.getY() > SCREEN_HEIGHT - 30) {
-					player1.setY(15);
-					player1.downwardSpeed = 0;
-				}
-				// Checks if player 2you hit the ground
-				if (player2.getY() > SCREEN_HEIGHT - 30) {
-					player2.setY(15);
-					player2.downwardSpeed = 0;
-				}
+				player1.fly(isNight);
+				player2.fly(isNight);
 			}
-
+			
 			// Playing
 			if (FlappyBird.currentMode == 1) {
 
 				movePipes();
+				//if pipe furtheset to the left hits the left side of the screen
+				//call function changescorenight
+				if (Data.pipeBottomDay[0].getX() < 0) {
+					scoreChangeNight();
+				}
 
 				// handlePipeCollision(player1);
 				handlePipeCollision(player2);
@@ -189,6 +183,15 @@ public class FlappyBird extends GraphicsProgram {
 			// This controls the speed of the game
 			pause(40);
 
+		}
+	}
+
+	// function to chagne to night every 500 points
+	public void scoreChangeNight() {
+		if ((int) total / 500 > scoreChange) {
+			scoreChange = (int) (total) / 500;
+			changeNight();
+			scoreChange = total;
 		}
 	}
 
@@ -240,15 +243,10 @@ public class FlappyBird extends GraphicsProgram {
 		// ensures that the bird isn't above the top of the screen
 		else if (FlappyBird.currentMode == 1) {
 			if (player == 1)
-				player1.capHeight();
+				player1.capHeight(isNight);
 			else if (player == 2)
-				player2.capHeight();
+				player2.capHeight(isNight);
 			Music.playSound("Music/flap.wav");
-			// if (player1.getY() > 0){
-			// 	player1.downwardSpeed = -10;
-			// 	//set to bottom of screen
-			// 	player1.setY(SCREEN_HEIGHT - 30);
-			// }
 		}
 
 	}
@@ -305,11 +303,7 @@ public class FlappyBird extends GraphicsProgram {
 
 				total = score1 + score2; // total score
 				drawScore();
-				// calls isNight every 250 points
-				if ((int) total / 500 > scoreChange) {
-					scoreChange = (int) (total) / 500;
-					changeNight();
-				}
+
 				Music.playSound("Music/coinSound.wav");
 			}
 
@@ -352,12 +346,6 @@ private void changeVisibility(boolean isVisible, GImage... images) {
 		// Change background
 		changeVisibility(isNight, Data.backgroundDay, Data.backgroundDay2, Data.backgroundDay3);
 		changeVisibility(!isNight, Data.backgroundNight, Data.backgroundNight2, Data.backgroundNight3);
-
-		for (int i = 0; i < 4; i++) {
-			// Change pipes
-			changeVisibility(isNight, Data.pipeTopDay[i], Data.pipeBottomDay[i], Data.pipeMiddleDay[i]);
-			changeVisibility(!isNight, Data.pipeTopNight[i], Data.pipeBottomNight[i], Data.pipeMiddleNight[i]);
-		}
 	}
 
 	public void resetPipes() {
