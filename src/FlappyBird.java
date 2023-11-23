@@ -176,8 +176,8 @@ public class FlappyBird extends GraphicsProgram {
 
 				movePipes();
 
-				handlePipeCollision(player1);
-				// handlePipeCollision(player2);
+				// handlePipeCollision(player1);
+				handlePipeCollision(player2);
 
 			}
 			moveBackground();
@@ -294,14 +294,14 @@ public class FlappyBird extends GraphicsProgram {
 
 			if (Data.pipeBottomDay[i].getX() == BIRD1_X_START + 2) {
 
-				// award score for each pipe that you pass
-				calculateScore(player1, 1, i);
-				calculateScore(player2, 2, i);
-
 				// update average score between pipes
 				pipeCounter += 2;
 				totalPipeScore += distance1[i] + distance2[i];
 				scoreInterval = totalPipeScore / pipeCounter;
+				
+				// award score for each pipe that you pass
+				calculateScore(player1, 1, i);
+				calculateScore(player2, 2, i);
 
 				total = score1 + score2; // total score
 				drawScore();
