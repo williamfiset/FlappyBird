@@ -117,6 +117,7 @@ public class Bird extends FlappyBird {
 		// Move Flappy Bird
 		if (isNight == false) {
 			
+			this.downwardSpeed += 1;
 
 			if (this.getY() < 0) {
 				this.setY(SCREEN_HEIGHT);
