@@ -59,8 +59,12 @@ public class Bird extends FlappyBird {
 		double scalingFactor = 10; // Adjust this value to make the bird scale slower
 		double maxSize = 25.0; // Adjust this value to set the maximum size
 		double minSize = 15.0; // Adjust this value to set the minimum size
-
-		double birdHeight = Math.min((this.getY() / scalingFactor), maxSize);
+		double birdHeight = 0;
+		if (isNight) {
+			birdHeight = Math.min(((this.getY()) / scalingFactor), maxSize);
+		} else if (!isNight){
+			birdHeight = Math.min(((SCREEN_HEIGHT - this.getY()) / scalingFactor), maxSize);
+		}
 		if (birdHeight < minSize)
 			birdHeight = minSize;
 
@@ -112,7 +116,7 @@ public class Bird extends FlappyBird {
 	}
 
 	/** Makes the bird move downwards **/
-	public void fly(boolean isNight) {
+	public void fly() {
 		// if day bird moves as normal
 		// Move Flappy Bird
 		if (isNight == false) {
@@ -141,7 +145,7 @@ public class Bird extends FlappyBird {
 	}
 
 	// loop bird form top to bottom
-	public void capHeight(boolean isNight) {
+	public void capHeight() {
 		if (isNight == false) {
 
 			this.downwardSpeed = -10;
@@ -151,7 +155,7 @@ public class Bird extends FlappyBird {
 			}
 
 		}
-		
+
 		if (isNight == true) {
 
 			this.downwardSpeed = 10;

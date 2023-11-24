@@ -22,7 +22,7 @@ public class FlappyBird extends GraphicsProgram {
 
 	static int currentMode = 0; // 0 = Get Ready, 1 = Playing, 2 = Falling, 3 = Game Over
 	static int score1, score2, total;
-	boolean isNight = true; // true = night, false = day
+	public static boolean isNight = true; // true = night, false = day
 	int scoreChange = 0; // needed to determin if night should change
 
 	// award for the space between pipes
@@ -159,8 +159,8 @@ public class FlappyBird extends GraphicsProgram {
 
 			if (FlappyBird.currentMode == 1 || FlappyBird.currentMode == 2) {
 
-				player1.fly(isNight);
-				player2.fly(isNight);
+				player1.fly();
+				player2.fly();
 			}
 
 			// Playing
@@ -169,7 +169,7 @@ public class FlappyBird extends GraphicsProgram {
 				movePipes();
 				//if pipe furtheset to the left hits the left side of the screen
 				//call function changescorenight
-				if (Data.pipeBottomDay[0].getX() < 0) {
+				if (Data.pipeBottomDay[0].getX() <= 0) {
 					scoreChangeNight();
 				}
 
@@ -194,7 +194,6 @@ public class FlappyBird extends GraphicsProgram {
 		if ((int) total / 500 > scoreChange) {
 			scoreChange = (int) (total) / 500;
 			changeNight();
-			scoreChange = total;
 		}
 	}
 
@@ -246,9 +245,9 @@ public class FlappyBird extends GraphicsProgram {
 		// ensures that the bird isn't above the top of the screen
 		else if (FlappyBird.currentMode == 1) {
 			if (player == 1)
-				player1.capHeight(isNight);
+				player1.capHeight();
 			else if (player == 2)
-				player2.capHeight(isNight);
+				player2.capHeight();
 			Music.playSound("Music/flap.wav");
 		}
 
@@ -364,6 +363,14 @@ public void flipAllImages() {
     Data.player2Flat = flipAndReplaceImage(Data.player2Flat);
     Data.player2Down = flipAndReplaceImage(Data.player2Down);
     Data.player2Up = flipAndReplaceImage(Data.player2Up);
+	Data.backgroundNight =  flipAndReplaceImage(Data.backgroundNight);
+	Data.backgroundNight2 = flipAndReplaceImage(Data.backgroundNight2);
+	Data.backgroundNight3 =  flipAndReplaceImage(Data.backgroundNight3);
+	//send all background images to the back
+	Data.backgroundNight.sendToBack();
+	Data.backgroundNight2.sendToBack();
+	Data.backgroundNight3.sendToBack();
+	Data.instructions = flipAndReplaceImage(Data.instructions);
 }
 
 private GImage flipAndReplaceImage(GImage oldImage) {
