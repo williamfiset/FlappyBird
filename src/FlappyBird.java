@@ -64,6 +64,9 @@ public class FlappyBird extends GraphicsProgram {
 
 		// randomize night
 		isNight = (Math.random() < 0.5);
+		if (!isNight){
+			flipAllImages();
+		}
 		changeNight();
 
 		// Adds starting images to screen
@@ -159,7 +162,7 @@ public class FlappyBird extends GraphicsProgram {
 				player1.fly(isNight);
 				player2.fly(isNight);
 			}
-			
+
 			// Playing
 			if (FlappyBird.currentMode == 1) {
 
@@ -339,9 +342,44 @@ private void changeVisibility(boolean isVisible, GImage... images) {
     }
 }
 
+public GImage flipVertical(GImage image) {
+    int[][] array = image.getPixelArray();
+    int height = array.length;
+    int width = array[0].length;
+    int[][] newArray = new int[height][width];
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            newArray[y][x] = array[height - y - 1][x];
+        }
+    }
+
+    return new GImage(newArray);
+}
+
+public void flipAllImages() {
+    Data.player1Flat = flipAndReplaceImage(Data.player1Flat);
+    Data.player1Down = flipAndReplaceImage(Data.player1Down);
+    Data.player1Up = flipAndReplaceImage(Data.player1Up);
+    Data.player2Flat = flipAndReplaceImage(Data.player2Flat);
+    Data.player2Down = flipAndReplaceImage(Data.player2Down);
+    Data.player2Up = flipAndReplaceImage(Data.player2Up);
+}
+
+private GImage flipAndReplaceImage(GImage oldImage) {
+    double x = oldImage.getX();
+    double y = oldImage.getY();
+    GImage newImage = flipVertical(oldImage);
+    remove(oldImage);
+    add(newImage, x, y);
+    return newImage;
+}
+
 	// change night function
 	public void changeNight() {
+	
 		isNight = !isNight;
+		flipAllImages();
 
 		// Change background
 		changeVisibility(isNight, Data.backgroundDay, Data.backgroundDay2, Data.backgroundDay3);
